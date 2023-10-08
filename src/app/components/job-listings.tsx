@@ -14,10 +14,10 @@ const JobListings = () => {
     axios
       .get(apiURL)
       .then((response) => {
-        setJobs(response.data);
+        // setJobs(response.data);
       })
       .catch((error) => {
-        console.log("Error fetching data:", error);
+        setJobs([]);
       });
   }, []);
 
