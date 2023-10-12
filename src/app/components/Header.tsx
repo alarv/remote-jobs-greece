@@ -3,12 +3,13 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import Link from 'next/link';
 
 const navigation = [
   { name: "Remote Jobs Greece", href: "#", current: true },
-  { name: "Ads", href: "#", current: false },
+  { name: "Ads", href: "/", current: false },
   { name: "Contact", href: "#", current: false },
-  { name: "About us", href: "#", current: false },
+  { name: "About us", href: "/about", current: false },
 ];
 
 function classNames(...classes: string[]) {
