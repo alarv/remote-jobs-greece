@@ -14,10 +14,14 @@ const JobListings = () => {
     axios
       .get(apiURL)
       .then((response) => {
-        // setJobs(response.data);
+        if (!response.data) {
+          setJobs([]);
+        } else {
+          setJobs(response.data);
+        }
       })
       .catch((error) => {
-        setJobs([]);
+        alert("There is this " + { error });
       });
   }, []);
 
