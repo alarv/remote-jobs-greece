@@ -1,20 +1,18 @@
-import Footer from '../components/Footer';
 import React from 'react';
-import Header from '@/app/components/Header';
 
 export default function About() {
   return (
     <>
       <main>
-        <h1 className="text-4xl font-bold mb-4">About Remote-Jobs-Greece.gr</h1>
+        <h1 className="text-4xl font-bold mb-4">About Remote-jobs-greece.gr</h1>
 
         <h2 className="text-2xl font-semibold mb-2">Who We Are</h2>
         <p className="mb-4">
           Remote-Jobs-Greece.gr is the ultimate platform dedicated to helping
-          Greeks find their dream remote job. In an age where work is becoming
-          increasingly location-independent, we believe that you should be able
-          to pursue a fulfilling career without compromising on work-life
-          balance.
+          people residing in Greece to find their dream remote job. In an age
+          where work is becoming increasingly location-independent, we believe
+          that you should be able to pursue a fulfilling career without
+          compromising on work-life balance.
         </p>
 
         <h2 className="text-2xl font-semibold mb-2">Our Mission</h2>
