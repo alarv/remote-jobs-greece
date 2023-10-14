@@ -11,3 +11,4 @@ export interface Job {
     job_type: string[];
   };
 }
+ 
