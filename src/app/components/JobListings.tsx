@@ -1,7 +1,7 @@
 import React from 'react';
-import { Job } from '@/app/job/job';
+import Job, { IJob } from '@/app/components/Job';
 
-async function getJobs(): Promise<Job[]> {
+async function getJobs(): Promise<IJob[]> {
   const apiURL = process.env.API_URL!;
 
   try {
@@ -20,11 +20,7 @@ export default async function JobListings() {
     <div>
       <h1>Job Listings</h1>
       {jobs.map((job) => (
-        <div key={job.id}>
-          <h2>{job.title.rendered}</h2>
-          <h3>Company: {job.acf.company_name}</h3>
-          <div>{job.content.rendered}</div>
-        </div>
+        <Job key={job.id} job={job} />
       ))}
     </div>
   );
