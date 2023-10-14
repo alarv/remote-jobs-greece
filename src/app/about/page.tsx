@@ -1,28 +1,82 @@
-import Footer from "../components/Footer";
-import React from "react";
-import Header from "@/app/components/Header";
-import JobListings from "../components/job-listings";
+import Footer from '../components/Footer';
+import React from 'react';
+import Header from '@/app/components/Header';
 
 export default function About() {
   return (
     <>
-      <Header />
-      <style>
-        @import
-        url('https://fonts.googleapis.com/css2?family=Poppins&display=swap')
-      </style>
+      <main>
+        <h1 className="text-4xl font-bold mb-4">About Remote-Jobs-Greece.gr</h1>
 
-      <main className="flex min-h-screen flex-col items-center _className_Poppins">
-        <div className="p-20" >
-        <h1 className="text-5xl">About us</h1>
+        <h2 className="text-2xl font-semibold mb-2">Who We Are</h2>
+        <p className="mb-4">
+          Remote-Jobs-Greece.gr is the ultimate platform dedicated to helping
+          Greeks find their dream remote job. In an age where work is becoming
+          increasingly location-independent, we believe that you should be able
+          to pursue a fulfilling career without compromising on work-life
+          balance.
+        </p>
 
-</div>
-<div className="m-20">
-  <h3 > Welcome to Remote Jobs Greece, your dedicated platform for discovering and securing remote job opportunities within the beautiful backdrop of Greece. At Remote Jobs Greece, we believe in the transformative power of remote work, and we are passionate about connecting job seekers with exciting opportunities in this dynamic and evolving job landscape.
-  </h3>
-</div>
+        <h2 className="text-2xl font-semibold mb-2">Our Mission</h2>
+        <p className="mb-4">
+          Our mission is simple: to connect skilled job seekers with the best
+          remote job opportunities in Greece. We aim to become the go-to
+          destination for people looking for remote jobs and for companies in
+          Greece looking to hire top talent, regardless of where they&apos;re
+          located.
+        </p>
+
+        <h2 className="text-2xl font-semibold mb-2">What We Offer</h2>
+
+        <h3 className="text-xl font-medium mb-2">For Job Seekers:</h3>
+        <ul className="list-disc list-inside mb-4">
+          <li>
+            A curated list of verified remote job openings across various
+            industries.
+          </li>
+          <li>A user-friendly platform to easily search and apply for jobs.</li>
+          <li>
+            Resources to help you excel in your remote job search, including
+            tips, articles, and webinars.
+          </li>
+        </ul>
+
+        <h3 className="text-xl font-medium mb-2">For Employers:</h3>
+        <ul className="list-disc list-inside mb-4">
+          <li>A quick and efficient way to post job listings.</li>
+          <li>
+            A large pool of qualified candidates interested in remote work.
+          </li>
+          <li>Affordable packages for posting multiple job listings.</li>
+        </ul>
+
+        <h2 className="text-2xl font-semibold mb-2">Why Choose Us?</h2>
+        <ul className="list-disc list-inside mb-4">
+          <li>
+            <strong>Quality over Quantity</strong>: We focus on listing
+            high-quality jobs that offer genuine value to our users.
+          </li>
+          <li>
+            <strong>Ease of Use</strong>: Our platform is intuitive and
+            straightforward, making your job search or hiring process as simple
+            as possible.
+          </li>
+          <li>
+            <strong>Community</strong>: We believe that remote work is more than
+            just a job; it&apos;s a lifestyle. Join our community to network,
+            share insights, and grow together.
+          </li>
+        </ul>
+
+        <h2 className="text-2xl font-semibold mb-2">Get in Touch</h2>
+        <p className="mb-4">
+          Have questions? We&apos;d love to hear from you. Contact us at{' '}
+          <a href="mailto:contact@remote-jobs-greece.gr" className="underline">
+            contact@remote-jobs-greece.gr
+          </a>
+          .
+        </p>
       </main>
-      <Footer />
     </>
   );
 }
