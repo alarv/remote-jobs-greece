@@ -1,10 +1,9 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import React, { ReactNode } from 'react';
-import { Onest } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import Header from '@/app/components/Header';
 import Footer from '@/app/components/Footer';
-import MainContent from '@/app/components/MainContent';
 
 export const metadata: Metadata = {
   title: 'Remote jobs Greece - Find and Post Remote Jobs in Greece',
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
     'Unlock a world of remote work opportunities in Greece with RemoteJobsGreece.gr. Browse listings for freelance, part-time, and full-time remote jobs, or post your own job openings to connect with top talent. Your next career move starts here.',
 };
 
-const onestFont = Onest({
+const interFont = Inter({
   subsets: ['latin'],
 });
 
@@ -22,10 +21,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={onestFont.className}>
+    <html lang="en" className={interFont.className}>
       <body>
         <Header />
-        <MainContent>{children}</MainContent>
+        {children}
         <Footer />
       </body>
     </html>

@@ -3,8 +3,10 @@ import React from 'react';
 export default function About() {
   return (
     <>
-      <main>
-        <h1 className="text-4xl font-bold mb-4">About Remote-jobs-greece.gr</h1>
+      <main className="mx-auto max-w-7xl px-2 py-5 sm:px-6 lg:px-8 ">
+        <h1 className="text-4xl font-semibold mb-4">
+          About Remote-jobs-greece.gr
+        </h1>
 
         <h2 className="text-2xl font-semibold mb-2">Who We Are</h2>
         <p className="mb-4">

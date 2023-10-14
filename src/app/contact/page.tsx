@@ -4,7 +4,7 @@ import Header from '@/app/components/Header';
 
 export default function ContactPage() {
   return (
-    <main>
+    <main className="mx-auto max-w-7xl px-2 py-5 sm:px-6 lg:px-8 ">
       <h1 className="text-2xl font-semibold mb-4">Contact Us</h1>
       <p className="mb-4">
         We&apos;d love to hear from you! Whether you&apos;re looking for a job
