@@ -7,7 +7,7 @@ import Footer from '@/app/components/Footer';
 import MainContent from '@/app/components/MainContent';
 
 export const metadata: Metadata = {
-  title: 'Remote-jobs-greece.gr - Find and Post Remote Jobs in Greece',
+  title: 'Remote jobs Greece - Find and Post Remote Jobs in Greece',
   description:
     'Unlock a world of remote work opportunities in Greece with RemoteJobsGreece.gr. Browse listings for freelance, part-time, and full-time remote jobs, or post your own job openings to connect with top talent. Your next career move starts here.',
 };
