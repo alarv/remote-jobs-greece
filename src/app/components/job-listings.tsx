@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Job } from "@/app/types/job";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Job } from '@/app/types/job';
 
 const JobListings = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
 
   useEffect(() => {
     // Replace with your WordPress REST API endpoint
-    const apiURL = "";
+    const apiURL = '';
 
     axios
       .get(apiURL)
@@ -21,7 +21,7 @@ const JobListings = () => {
         }
       })
       .catch((error) => {
-        alert("There is this " + { error });
+        console.error('There is this ' + { error });
       });
   }, []);
 
