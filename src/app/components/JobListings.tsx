@@ -1,11 +1,11 @@
 import React from 'react';
-import Job, { IJob } from '@/app/components/Job';
+import JobListing, { IJob } from '@/app/components/JobListing';
 
 async function getJobs(): Promise<IJob[]> {
   const apiURL = process.env.API_URL!;
 
   try {
-    const response = await fetch(apiURL);
+    const response = await fetch(`${apiURL}/jobs`, { cache: 'no-store' });
     return response.json();
   } catch (err) {
     console.error('jobs could not be retrieved');
@@ -17,14 +17,13 @@ export default async function JobListings() {
   const jobs = await getJobs();
 
   return (
-    <div className="grid grid-cols-3 gap-4">
-    <div >filters
-    </div>
-    <div className="col-span-2">
+    <main className="grid grid-cols-3 gap-4">
+      <div>filters</div>
+      <div className="col-span-2">
         {jobs.map((job) => (
-          <Job key={job.id} job={job} />
+          <JobListing key={job.id} job={job} />
         ))}
       </div>
-      </div>
+    </main>
   );
 }
