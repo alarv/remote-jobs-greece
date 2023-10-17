@@ -8,7 +8,8 @@ export interface IJob {
   };
   acf: {
     company_name: string;
-    job_type: string[];
+    employment_type: string[];
+    job_type: string;
     salary_minimum_range: number;
     salary_maximum_range: number;
   };
@@ -20,11 +21,13 @@ interface JobProps {
 
 export default function JobListing({ job }: JobProps) {
   return (
-    <div className="w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+    <a href={`/job/${job.id}`}><div className="w-full p-4 bg-white border border-transparent shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700 group hover:bg-indigo-50 hover:shadow-lg hover:border-indigo-500 ">
       <div className="flex items-center justify-between mb-4">
-        <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
+        <h5 className="text-xl leading-none dark:text-white text-gray-700 group-hover:text-indigo-600">
           {job.title.rendered}
         </h5>
+        <p className="bg-purple-100 text-purple-700 rounded-full px-3 py-1 text-sm text-indigo-500 group-hover:text-gray-500 ">{job.acf.employment_type}</p>
+
         {/*<a*/}
         {/*  href="#"*/}
         {/*  className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"*/}
@@ -38,20 +41,24 @@ export default function JobListing({ job }: JobProps) {
           className="divide-y divide-gray-200 dark:divide-gray-700"
         >
           <li className="py-3 sm:py-4">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center">
               <div className="flex-shrink-0">
                 {/*<img className="w-8 h-8 rounded-full" src="/docs/images/people/profile-picture-1.jpg"*/}
                 {/*     alt="Neil image"> */}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                  {job.title.rendered}
+{job.acf.job_type}{' '}
+
                 </p>
                 <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-                  {job.acf.company_name}{' '}
+                {job.acf.company_name}{' '}
+
                 </p>
               </div>
-              <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+
+              <div className="flex items-center text-base font-semibold text-gray-900 dark:text-white">
+
                 <p> {job.acf.salary_minimum_range}</p>
               </div>
             </div>
@@ -59,5 +66,6 @@ export default function JobListing({ job }: JobProps) {
         </ul>
       </div>
     </div>
+    </a>
   );
 }
