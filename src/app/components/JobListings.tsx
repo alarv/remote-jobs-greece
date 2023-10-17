@@ -17,11 +17,17 @@ export default async function JobListings() {
   const jobs = await getJobs();
 
   return (
-    <div>
-      <h1>Job Listings</h1>
-      {jobs.map((job) => (
-        <Job key={job.id} job={job} />
-      ))}
+    <div className="grid grid-cols-3 gap-4">
+    <div >filters
     </div>
+    <div style={{
+        background:
+          'green',
+      }} className="col-span-2">
+        {jobs.map((job) => (
+          <Job key={job.id} job={job} />
+        ))}
+      </div>
+      </div>
   );
 }
