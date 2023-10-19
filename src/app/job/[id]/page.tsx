@@ -20,10 +20,16 @@ export default async function Page({ params }: { params: { id: string } }) {
   const markup = { __html: job.content.rendered };
 
   return (
-    <main className="mx-auto max-w-7xl px-2 py-5 sm:px-6 lg:px-8">
-      <h1>{job.title.rendered}</h1>
+    <main className="mx-auto max-w-7xl px-2 py-5 sm:px-6 lg:px-8 bg-gray-100">
+      <div className="w-4/5 mx-auto p-8 mt-8 bg-white shadow-md rounded-lg">
+      <h1 className="text-3xl font-semibold">{job.title.rendered}</h1>
+      <p className="text-gray-500">{job.acf.company_name}</p>
+        <p className="font-semibold mt-4">{job.acf.salary_minimum_range}-{job.acf.salary_maximum_range}$</p>
+        <p className="font-semibold">{job.acf.employment_type}</p>
+        <p className="font-semibold">{job.acf.job_type}</p>
+        <p className='mt-4' dangerouslySetInnerHTML={markup}></p>
 
-      <p dangerouslySetInnerHTML={markup}></p>
+      </div>
     </main>
   );
 }
