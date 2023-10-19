@@ -1,5 +1,6 @@
 import React from 'react';
 import JobListing, { IJob } from '@/app/components/JobListing';
+import Example from './Filters';
 
 async function getJobs(): Promise<IJob[]> {
   const apiURL = process.env.API_URL!;
@@ -18,7 +19,9 @@ export default async function JobListings() {
 
   return (
     <main className="grid grid-cols-3 gap-4">
-      <div>filters</div>
+      <div>
+        <Example />
+        </div>
       <div className="col-span-2">
       <div className="w-full bg-white border border-gray-200 rounded-t-lg  shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
       <div className="flex items-center justify-between ">
