@@ -21,7 +21,7 @@ interface JobProps {
 
 export default function JobListing({ job }: JobProps) {
   return (
-    <a href={`/job/${job.id}`}><div className="w-full p-4 bg-white border border-transparent shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700 group hover:bg-indigo-50 hover:shadow-lg hover:border-indigo-500 ">
+    <a href={`/job/${job.id}`}><div className="w-full p-4 bg-white rounded-b-lg border-hidden sm:p-8 dark:bg-gray-800 group hover:bg-indigo-50 hover:shadow-lg hover:border-indigo-500 ">
       <div className="flex items-center justify-between mb-4">
         <h5 className="text-xl leading-none dark:text-white text-gray-700 group-hover:text-indigo-600">
           {job.title.rendered}
