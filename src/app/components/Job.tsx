@@ -14,6 +14,8 @@ export interface IJob {
     salary_minimum_range: number;
     salary_maximum_range: number;
     job_type: string;
+    job_field: string[];
+    job_tag: string[];
   };
 }
 
