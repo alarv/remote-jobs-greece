@@ -1,17 +1,3 @@
-/*
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 'use client';
 import { Fragment, useState } from 'react';
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
@@ -24,6 +10,10 @@ import {
   Squares2X2Icon,
 } from '@heroicons/react/20/solid';
 import React from 'react';
+
+interface FiltersProps {
+  onFiltersChange: () => void; // Example: A function prop
+}
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
@@ -95,8 +85,14 @@ const filters = [
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
+function onFiltersChange(jobType: string) {
+}
 
-export default function Example() {
+function jobTypeChanged(jobType: string){
+onFiltersChange(jobType)
+}
+
+export default function Filters(props: FiltersProps) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   return (
@@ -154,8 +150,8 @@ export default function Example() {
                       className="px-2 py-3 font-medium text-gray-900"
                     >
                       {Object.values(jobTypes).map((jobType) => (
-                        <li key={jobType}>
-                          <a href="#" className="block px-2 py-3">
+                        <li key={jobType} onClick={() => jobTypeChanged(jobType)}>
+                          <a href="" className="block px-2 py-3">
                             {jobType}
                           </a>
                         </li>

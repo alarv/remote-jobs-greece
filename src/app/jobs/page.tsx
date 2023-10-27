@@ -1,11 +1,25 @@
-import JobListings from '@/app/components/JobListings';
 import React from 'react';
+import JobListings from '../components/JobListings';
+import { Job } from '../components/JobListing';
 
-export default function Jobs() {
+async function getJobs(): Promise<Job[]> {
+  const apiURL = process.env.API_URL!;
+
+  try {
+    const response = await fetch(`${apiURL}/jobs`, { cache: 'no-store' });
+    return response.json();
+  } catch (err) {
+    console.error('jobs could not be retrieved');
+    return [];
+  }
+}
+
+export default async function Jobs() {
+  const jobs = await getJobs();
   return (
     <>
       <main className="mx-auto max-w-7xl px-2 py-5 sm:px-6 lg:px-8">
-        <JobListings />
+        <JobListings jobs={jobs} />
       </main>
     </>
   );

@@ -8,6 +8,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import React from 'react';
 
 const navigation = [
   { name: 'Remote jobs Greece', href: '/', current: true },
