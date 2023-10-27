@@ -1,6 +1,6 @@
 import React from 'react';
-import JobListing, { IJob } from '@/app/components/JobListing';
 import Example from './Filters';
+import JobListing, { IJob } from './JobListing';
 
 async function getJobs(): Promise<IJob[]> {
   const apiURL = process.env.API_URL!;

@@ -23,7 +23,7 @@ import {
   PlusIcon,
   Squares2X2Icon,
 } from '@heroicons/react/20/solid';
-import { IJob } from '@/app/components/JobListing';
+import React from 'react';
 
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },

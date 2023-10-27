@@ -1,5 +1,6 @@
-import { IJob } from '@/app/components/JobListing';
 import { notFound } from 'next/navigation';
+import React from 'react';
+import { IJob } from '../../components/JobListing';
 
 async function getJob(id: string): Promise<IJob | undefined> {
   const apiURL = process.env.API_URL!;
