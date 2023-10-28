@@ -11,8 +11,14 @@ import {
 } from '@heroicons/react/20/solid';
 import React from 'react';
 
+export interface IFilters {
+  company_name?: string;
+  job_type?: string;
+  job_field?: string;
+}
+
 interface FiltersProps {
-  onFiltersChange: () => void; // Example: A function prop
+  onFiltersChange: (filters: IFilters) => void; // Example: A function prop
 }
 
 const sortOptions = [
@@ -44,7 +50,7 @@ const jobTypes = {
   architecture: 'Architecture',
   data_entry: 'Data Entry',
 };
-const filters = [
+const filtersContent = [
   {
     id: 'color',
     name: 'Color',
@@ -85,15 +91,20 @@ const filters = [
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
-function onFiltersChange(jobType: string) {
-}
 
-function jobTypeChanged(jobType: string){
-onFiltersChange(jobType)
-}
-
-export default function Filters(props: FiltersProps) {
+export function Filters(props: FiltersProps) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [filters, setFilters] = useState<IFilters>({});
+
+  function onFiltersChange() {
+    props.onFiltersChange(filters);
+  }
+
+  function jobTypeChanged(jobType: string) {
+    console.log(jobType);
+    setFilters({ ...filters, job_type: jobType });
+    onFiltersChange();
+  }
 
   return (
     <div className="bg-white">
@@ -150,7 +161,10 @@ export default function Filters(props: FiltersProps) {
                       className="px-2 py-3 font-medium text-gray-900"
                     >
                       {Object.values(jobTypes).map((jobType) => (
-                        <li key={jobType} onClick={() => jobTypeChanged(jobType)}>
+                        <li
+                          key={jobType}
+                          onClick={() => jobTypeChanged(jobType)}
+                        >
                           <a href="" className="block px-2 py-3">
                             {jobType}
                           </a>
@@ -158,7 +172,7 @@ export default function Filters(props: FiltersProps) {
                       ))}
                     </ul>
 
-                    {filters.map((section) => (
+                    {filtersContent.map((section) => (
                       <Disclosure
                         as="div"
                         key={section.id}
@@ -306,13 +320,13 @@ export default function Filters(props: FiltersProps) {
                   className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
                 >
                   {Object.values(jobTypes).map((jobType) => (
-                    <li key={jobType}>
+                    <li key={jobType} onClick={() => jobTypeChanged(jobType)}>
                       <a href="#">{jobType}</a>
                     </li>
                   ))}
                 </ul>
 
-                {filters.map((section) => (
+                {filtersContent.map((section) => (
                   <Disclosure
                     as="div"
                     key={section.id}
