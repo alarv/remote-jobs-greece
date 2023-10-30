@@ -34,7 +34,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         <ul className="flex items-start flex-wrap mt-4">
           <li className="flex mx-1">
             <a
-              className="p-2 px-3 border-purple-800 mb-4 rounded font-medium hover:bg-transparent hover:border-purple-800 border bg-purple-400/25 dark:bg-purple text-purple-800"
+              className="p-2 px-3 border-purple-800 mb-4 rounded font-medium hover:bg-transparent hover:border-purple-800 border bg-purple-100 text-purple-700 rounded-full text-indigo-500"
               href="category/all"
             >
               {job.acf.job_tag}

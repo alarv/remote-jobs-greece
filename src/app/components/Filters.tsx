@@ -13,8 +13,8 @@ import React from 'react';
 
 export interface IFilters {
   company_name?: string;
-  job_type?: string;
-  job_field?: string;
+  job_type?: string[];
+  job_field?: string[];
 }
 
 interface FiltersProps {
@@ -28,64 +28,52 @@ const sortOptions = [
   { name: 'Price: Low to High', href: '#', current: false },
   { name: 'Price: High to Low', href: '#', current: false },
 ];
-const jobTypes = {
-  software: 'Software Development and IT',
-  marketing: 'Digital Marketing',
-  design: 'Design and Creative',
-  content: 'Writing and Content Creation',
-  customer_support: 'Customer Support',
-  project_management: 'Project Management',
-  sales: 'Sales and Business Development',
-  education: 'Education and Online Teaching',
-  healthcare: 'Healthcare',
-  financial: 'Financial and Accounting',
-  hr: 'Human Resources',
-  legal: 'Legal',
-  research: 'Research and Analysis',
-  translation: 'Translation and Localization',
-  virtual_assistance: 'Virtual Assistance',
-  consulting: 'Consulting and Coaching',
-  engineering: 'Engineering',
-  science: 'Science and Laboratory',
-  architecture: 'Architecture',
-  data_entry: 'Data Entry',
+
+
+const filtersExample = {
+  jobType: ['software', 'sales'],
 };
+
 const filtersContent = [
+
   {
-    id: 'color',
-    name: 'Color',
-    options: [
-      { value: 'white', label: 'White', checked: false },
-      { value: 'beige', label: 'Beige', checked: false },
-      { value: 'blue', label: 'Blue', checked: true },
-      { value: 'brown', label: 'Brown', checked: false },
-      { value: 'green', label: 'Green', checked: false },
-      { value: 'purple', label: 'Purple', checked: false },
+    id: 'jobTypes',
+    name: 'Job Type',
+    options:[
+      { value: 'software', label: 'Software Development and IT', checked: false },
+      { value: 'marketing', label: 'Digital Marketing', checked: false },
+      { value: 'design', label: 'Design and Creative', checked: false },
+      { value: 'content', label: 'Writing and Content Creation', checked: true },
+      { value: 'customer_support', label: 'Customer Support', checked: false },
+      { value: 'project_management', label: 'Project Management', checked: false },
+      { value: 'sales', label: 'Sales and Business Development', checked: false },
+      { value: 'hr', label: 'Human Resources', checked:false},
+      { value: 'education', label: 'Education and Online Teaching', checked:false},
+      { value: 'financial', label: 'Financial and Accounting', checked:false},
+      { value: 'healthcare', label: 'Healthcare', checked:false},
+      { value: 'legal', label: 'Legal', checked:false},
+      { value: 'research', label: 'Research and Analysis', checked:false},
+      { value: 'translation', label: 'Translation and Localization', checked:false},
+      { value: 'virtual_assistance', label: 'Virtual Assistance', checked:false},
+      { value: 'consulting', label: 'Consulting and Coaching', checked:false},
+      { value: 'engineering', label: 'Engineering', checked:false},
+      { value: 'science', label: 'Science and Laboratory', checked:false},
+      { value: 'architecture', label: 'Architecture', checked:false},
+      { value: 'data_entry', label: 'Data Entry', checked:false},
     ],
   },
   {
-    id: 'category',
-    name: 'Category',
+    id: 'employmentType',
+    name: 'Employment Type',
     options: [
-      { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-      { value: 'sale', label: 'Sale', checked: false },
-      { value: 'travel', label: 'Travel', checked: true },
-      { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false },
+      { value: 'full-time', label: 'Full-time', checked: false },
+      { value: 'part-time', label: 'Part-time', checked: false },
+      { value: 'contract', label: 'Contract', checked: true },
+      { value: 'internship', label: 'Internship', checked: false },
+      { value: 'temporary', label: 'Temporary', checked: false },
     ],
   },
-  {
-    id: 'size',
-    name: 'Size',
-    options: [
-      { value: '2l', label: '2L', checked: false },
-      { value: '6l', label: '6L', checked: false },
-      { value: '12l', label: '12L', checked: false },
-      { value: '18l', label: '18L', checked: false },
-      { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true },
-    ],
-  },
+
 ];
 
 function classNames(...classes: string[]) {
@@ -100,22 +88,18 @@ export function Filters(props: FiltersProps) {
     props.onFiltersChange(filters);
   }
 
-  function jobTypeChanged(jobType: string) {
-    console.log(jobType);
-    setFilters({ ...filters, job_type: jobType });
+  // software, sales, engineering
+  function jobTypeChanged(selectedJobTypes: string[]) {
+    setFilters({ ...filters, job_type: selectedJobTypes });
     onFiltersChange();
   }
 
   return (
-    <div className="bg-white">
+<div className="bg-white">
       <div>
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
-          <Dialog
-            as="div"
-            className="relative z-40 lg:hidden"
-            onClose={setMobileFiltersOpen}
-          >
+          <Dialog as="div" className="relative z-40 lg:hidden" onClose={setMobileFiltersOpen}>
             <Transition.Child
               as={Fragment}
               enter="transition-opacity ease-linear duration-300"
@@ -140,9 +124,7 @@ export function Filters(props: FiltersProps) {
               >
                 <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
                   <div className="flex items-center justify-between px-4">
-                    <h2 className="text-lg font-medium text-gray-900">
-                      Filters
-                    </h2>
+                    <h2 className="text-lg font-medium text-gray-900">Filters</h2>
                     <button
                       type="button"
                       className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
@@ -155,47 +137,20 @@ export function Filters(props: FiltersProps) {
 
                   {/* Filters */}
                   <form className="mt-4 border-t border-gray-200">
-                    <h3 className="sr-only">Categories</h3>
-                    <ul
-                      role="list"
-                      className="px-2 py-3 font-medium text-gray-900"
-                    >
-                      {Object.values(jobTypes).map((jobType) => (
-                        <li
-                          key={jobType}
-                          onClick={() => jobTypeChanged(jobType)}
-                        >
-                          <a href="" className="block px-2 py-3">
-                            {jobType}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
+
 
                     {filtersContent.map((section) => (
-                      <Disclosure
-                        as="div"
-                        key={section.id}
-                        className="border-t border-gray-200 px-4 py-6"
-                      >
+                      <Disclosure as="div" key={section.id} className="border-t border-gray-200 px-4 py-6">
                         {({ open }) => (
                           <>
                             <h3 className="-mx-2 -my-3 flow-root">
                               <Disclosure.Button className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
-                                <span className="font-medium text-gray-900">
-                                  {section.name}
-                                </span>
+                                <span className="font-medium text-gray-900">{section.name}</span>
                                 <span className="ml-6 flex items-center">
                                   {open ? (
-                                    <MinusIcon
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
+                                    <MinusIcon className="h-5 w-5" aria-hidden="true" />
                                   ) : (
-                                    <PlusIcon
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
+                                    <PlusIcon className="h-5 w-5" aria-hidden="true" />
                                   )}
                                 </span>
                               </Disclosure.Button>
@@ -203,10 +158,7 @@ export function Filters(props: FiltersProps) {
                             <Disclosure.Panel className="pt-6">
                               <div className="space-y-6">
                                 {section.options.map((option, optionIdx) => (
-                                  <div
-                                    key={option.value}
-                                    className="flex items-center"
-                                  >
+                                  <div key={option.value} className="flex items-center">
                                     <input
                                       id={`filter-mobile-${section.id}-${optionIdx}`}
                                       name={`${section.id}[]`}
@@ -235,9 +187,9 @@ export function Filters(props: FiltersProps) {
             </div>
           </Dialog>
         </Transition.Root>
-
+ 
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-4">
+          <div className="flex items-baseline justify-between md:border-b border-gray-200 pb-6 pt-4">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
               New Arrivals
             </h1>
@@ -306,25 +258,14 @@ export function Filters(props: FiltersProps) {
             </div>
           </div>
 
-          <section aria-labelledby="products-heading" className="pb-24 pt-6">
+          <section aria-labelledby="products-heading" className="md:pb-24 md:pt-6">
             <h2 id="products-heading" className="sr-only">
               Products
             </h2>
 
-            <div className="grid">
+            <div className="grid-cols-1">
               {/* Filters */}
-              <form className="hidden lg:block">
-                <h3 className="sr-only">Categories</h3>
-                <ul
-                  role="list"
-                  className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
-                >
-                  {Object.values(jobTypes).map((jobType) => (
-                    <li key={jobType} onClick={() => jobTypeChanged(jobType)}>
-                      <a href="#">{jobType}</a>
-                    </li>
-                  ))}
-                </ul>
+              <form className="hidden md:block">
 
                 {filtersContent.map((section) => (
                   <Disclosure
@@ -382,12 +323,12 @@ export function Filters(props: FiltersProps) {
                       </>
                     )}
                   </Disclosure>
-                ))}
-              </form>
+                            ))} 
+               </form> 
 
               {/* Product grid */}
               <div className="lg:col-span-3">{/* Your content */}</div>
-            </div>
+              </div>
           </section>
         </main>
       </div>

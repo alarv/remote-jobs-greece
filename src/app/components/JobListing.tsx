@@ -31,7 +31,7 @@ export default function JobListing({ job }: JobProps) {
           <h5 className="text-xl leading-none dark:text-white text-gray-700 group-hover:text-indigo-600">
             {job.title.rendered}
           </h5>
-          <p className="bg-purple-100 text-purple-700 rounded-full px-3 py-1 text-sm text-indigo-500 group-hover:text-gray-500 ">
+          <p className="bg-purple-100 text-purple-700 rounded-full px-3 py-1 text-sm text-indigo-500 group-hover:text-gray-500  ">
             {job.acf.employment_type}
           </p>
 
@@ -63,7 +63,7 @@ export default function JobListing({ job }: JobProps) {
                 </div>
 
                 <div className="flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                  <p> {job.acf.salary_minimum_range}</p>
+                  <p> {job.acf.salary_minimum_range}$</p>
                 </div>
               </div>
             </li>
