@@ -16,5 +16,24 @@
   }
 }
 
-footer{
+/* Beta ribbon */
+body:after {
+  content: 'beta';
+  position: fixed;
+  width: 80px;
+  height: 25px;
+  background: rgba(255, 99, 71, 0.7);
+  top: 7px;
+  right: -20px;
+  text-align: center;
+  font-size: 13px;
+  font-family: sans-serif;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #fff;
+  line-height: 27px;
+  transform: rotate(45deg);
+}
+
+footer {
 }
