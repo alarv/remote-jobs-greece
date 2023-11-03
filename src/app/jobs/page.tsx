@@ -1,8 +1,9 @@
 import React from 'react';
 import JobListings from '../components/JobListings';
 import { Job } from '../components/JobListing';
+import { IFilters } from '../components/Filters';
 
-async function getJobs(): Promise<Job[]> {
+async function getJobs(filters: IFilters = {}): Promise<Job[]> {
   const apiURL = process.env.API_URL!;
 
   try {

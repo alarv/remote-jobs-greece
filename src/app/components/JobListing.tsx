@@ -1,5 +1,8 @@
 import React from 'react';
 
+export interface Tag {
+  name: string;
+}
 export interface Job {
   id: number;
   title: {
@@ -15,7 +18,7 @@ export interface Job {
     salary_minimum_range: number;
     salary_maximum_range: number;
     job_field: string[];
-    job_tag: string[];
+    tags: Tag[];
   };
 }
 
