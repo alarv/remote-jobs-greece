@@ -10,15 +10,16 @@ import {
   Squares2X2Icon,
 } from '@heroicons/react/20/solid';
 import React from 'react';
+import { input } from '@material-tailwind/react';
 
 export interface IFilters {
   company_name?: string;
-  job_type?: string[];
-  job_field?: string[];
+  job_type?: string;
+  job_field?: string;
 }
 
 interface FiltersProps {
-  onFiltersChange: (filters: IFilters) => void; // Example: A function prop
+  onFiltersChange: (filters: IFilters) => void;
 }
 
 const sortOptions = [
@@ -29,51 +30,72 @@ const sortOptions = [
   { name: 'Price: High to Low', href: '#', current: false },
 ];
 
-
-const filtersExample = {
-  jobType: ['software', 'sales'],
-};
-
 const filtersContent = [
-
   {
-    id: 'jobTypes',
-    name: 'Job Type',
-    options:[
-      { value: 'software', label: 'Software Development and IT', checked: false },
+    id: 'job_field',
+    name: 'Job Field',
+    options: [
+      {
+        value: 'software',
+        label: 'Software Development and IT',
+        checked: false,
+      },
       { value: 'marketing', label: 'Digital Marketing', checked: false },
       { value: 'design', label: 'Design and Creative', checked: false },
-      { value: 'content', label: 'Writing and Content Creation', checked: true },
+      {
+        value: 'content',
+        label: 'Writing and Content Creation',
+        checked: false,
+      },
       { value: 'customer_support', label: 'Customer Support', checked: false },
-      { value: 'project_management', label: 'Project Management', checked: false },
-      { value: 'sales', label: 'Sales and Business Development', checked: false },
-      { value: 'hr', label: 'Human Resources', checked:false},
-      { value: 'education', label: 'Education and Online Teaching', checked:false},
-      { value: 'financial', label: 'Financial and Accounting', checked:false},
-      { value: 'healthcare', label: 'Healthcare', checked:false},
-      { value: 'legal', label: 'Legal', checked:false},
-      { value: 'research', label: 'Research and Analysis', checked:false},
-      { value: 'translation', label: 'Translation and Localization', checked:false},
-      { value: 'virtual_assistance', label: 'Virtual Assistance', checked:false},
-      { value: 'consulting', label: 'Consulting and Coaching', checked:false},
-      { value: 'engineering', label: 'Engineering', checked:false},
-      { value: 'science', label: 'Science and Laboratory', checked:false},
-      { value: 'architecture', label: 'Architecture', checked:false},
-      { value: 'data_entry', label: 'Data Entry', checked:false},
+      {
+        value: 'project_management',
+        label: 'Project Management',
+        checked: false,
+      },
+      {
+        value: 'sales',
+        label: 'Sales and Business Development',
+        checked: false,
+      },
+      { value: 'hr', label: 'Human Resources', checked: false },
+      {
+        value: 'education',
+        label: 'Education and Online Teaching',
+        checked: false,
+      },
+      { value: 'financial', label: 'Financial and Accounting', checked: false },
+      { value: 'healthcare', label: 'Healthcare', checked: false },
+      { value: 'legal', label: 'Legal', checked: false },
+      { value: 'research', label: 'Research and Analysis', checked: false },
+      {
+        value: 'translation',
+        label: 'Translation and Localization',
+        checked: false,
+      },
+      {
+        value: 'virtual_assistance',
+        label: 'Virtual Assistance',
+        checked: false,
+      },
+      { value: 'consulting', label: 'Consulting and Coaching', checked: false },
+      { value: 'engineering', label: 'Engineering', checked: false },
+      { value: 'science', label: 'Science and Laboratory', checked: false },
+      { value: 'architecture', label: 'Architecture', checked: false },
+      { value: 'data_entry', label: 'Data Entry', checked: false },
     ],
   },
   {
-    id: 'employmentType',
+    id: 'employment_type',
     name: 'Employment Type',
     options: [
       { value: 'full-time', label: 'Full-time', checked: false },
       { value: 'part-time', label: 'Part-time', checked: false },
-      { value: 'contract', label: 'Contract', checked: true },
+      { value: 'contract', label: 'Contract', checked: false },
       { value: 'internship', label: 'Internship', checked: false },
       { value: 'temporary', label: 'Temporary', checked: false },
     ],
   },
-
 ];
 
 function classNames(...classes: string[]) {
@@ -84,22 +106,37 @@ export function Filters(props: FiltersProps) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [filters, setFilters] = useState<IFilters>({});
 
-  function onFiltersChange() {
+  function onFiltersChange(filters: IFilters) {
     props.onFiltersChange(filters);
   }
 
   // software, sales, engineering
-  function jobTypeChanged(selectedJobTypes: string[]) {
-    setFilters({ ...filters, job_type: selectedJobTypes });
-    onFiltersChange();
+  function handleChange(
+    key: keyof IFilters,
+    value: string,
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) {
+    const updatedFilters: IFilters = { ...filters };
+    if (event.target.checked) {
+      updatedFilters[key] = value;
+    } else {
+      delete updatedFilters[key];
+    }
+
+    setFilters(updatedFilters);
+    onFiltersChange(updatedFilters);
   }
 
   return (
-<div className="bg-white">
+    <div className="bg-white">
       <div>
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
-          <Dialog as="div" className="relative z-40 lg:hidden" onClose={setMobileFiltersOpen}>
+          <Dialog
+            as="div"
+            className="relative z-40 lg:hidden"
+            onClose={setMobileFiltersOpen}
+          >
             <Transition.Child
               as={Fragment}
               enter="transition-opacity ease-linear duration-300"
@@ -124,7 +161,6 @@ export function Filters(props: FiltersProps) {
               >
                 <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
                   <div className="flex items-center justify-between px-4">
-                    <h2 className="text-lg font-medium text-gray-900">Filters</h2>
                     <button
                       type="button"
                       className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
@@ -137,20 +173,30 @@ export function Filters(props: FiltersProps) {
 
                   {/* Filters */}
                   <form className="mt-4 border-t border-gray-200">
-
-
                     {filtersContent.map((section) => (
-                      <Disclosure as="div" key={section.id} className="border-t border-gray-200 px-4 py-6">
+                      <Disclosure
+                        as="div"
+                        key={section.id}
+                        className="border-t border-gray-200 px-4 py-6"
+                      >
                         {({ open }) => (
                           <>
                             <h3 className="-mx-2 -my-3 flow-root">
                               <Disclosure.Button className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
-                                <span className="font-medium text-gray-900">{section.name}</span>
+                                <span className="font-medium text-gray-900">
+                                  {section.name}
+                                </span>
                                 <span className="ml-6 flex items-center">
                                   {open ? (
-                                    <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                                    <MinusIcon
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
                                   ) : (
-                                    <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                                    <PlusIcon
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
                                   )}
                                 </span>
                               </Disclosure.Button>
@@ -158,13 +204,23 @@ export function Filters(props: FiltersProps) {
                             <Disclosure.Panel className="pt-6">
                               <div className="space-y-6">
                                 {section.options.map((option, optionIdx) => (
-                                  <div key={option.value} className="flex items-center">
+                                  <div
+                                    key={option.value}
+                                    className="flex items-center"
+                                  >
                                     <input
                                       id={`filter-mobile-${section.id}-${optionIdx}`}
                                       name={`${section.id}[]`}
                                       defaultValue={option.value}
                                       type="checkbox"
                                       defaultChecked={option.checked}
+                                      onChange={(event) =>
+                                        handleChange(
+                                          section.id as keyof IFilters,
+                                          option.value,
+                                          event,
+                                        )
+                                      }
                                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                     />
                                     <label
@@ -187,13 +243,9 @@ export function Filters(props: FiltersProps) {
             </div>
           </Dialog>
         </Transition.Root>
- 
+
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between md:border-b border-gray-200 pb-6 pt-4">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-              New Arrivals
-            </h1>
-
             <div className="flex items-center">
               <Menu as="div" className="relative inline-block text-left">
                 <div>
@@ -252,13 +304,15 @@ export function Filters(props: FiltersProps) {
                 className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
                 onClick={() => setMobileFiltersOpen(true)}
               >
-                <span className="sr-only">Filters</span>
                 <FunnelIcon className="h-5 w-5" aria-hidden="true" />
               </button>
             </div>
           </div>
 
-          <section aria-labelledby="products-heading" className="md:pb-24 md:pt-6">
+          <section
+            aria-labelledby="products-heading"
+            className="md:pb-24 md:pt-6"
+          >
             <h2 id="products-heading" className="sr-only">
               Products
             </h2>
@@ -266,7 +320,6 @@ export function Filters(props: FiltersProps) {
             <div className="grid-cols-1">
               {/* Filters */}
               <form className="hidden md:block">
-
                 {filtersContent.map((section) => (
                   <Disclosure
                     as="div"
@@ -323,12 +376,12 @@ export function Filters(props: FiltersProps) {
                       </>
                     )}
                   </Disclosure>
-                            ))} 
-               </form> 
+                ))}
+              </form>
 
               {/* Product grid */}
               <div className="lg:col-span-3">{/* Your content */}</div>
-              </div>
+            </div>
           </section>
         </main>
       </div>

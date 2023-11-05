@@ -6,13 +6,14 @@ import JobListing, { Job } from './JobListing';
 
 interface JobListingProps {
   jobs: Job[];
+  onFiltersChange?: (filters: IFilters) => void;
 }
 
 export default function JobListings(props: JobListingProps) {
   const jobs = props.jobs;
 
   function filtersChanged(filters: IFilters) {
-    console.log('filters changed', filters);
+    props.onFiltersChange && props.onFiltersChange(filters);
   }
 
   return (

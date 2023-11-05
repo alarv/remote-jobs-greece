@@ -33,12 +33,14 @@ export default async function Page({ params }: { params: { id: string } }) {
         <p className="font-semibold">{job.acf.job_field}</p>
         <ul className="flex items-start flex-wrap mt-4">
           <li className="flex mx-1">
-            <a
-              className="p-2 px-3 border-purple-800 mb-4 rounded font-medium hover:bg-transparent hover:border-purple-800 border bg-purple-100 text-purple-700 rounded-full text-indigo-500"
-              href="category/all"
-            >
-              {job.acf.job_tag}
-            </a>
+            {job.acf.tags.map((tag) => (
+              <a
+                className="p-2 px-3 border-purple-800 mb-4 rounded font-medium hover:bg-transparent hover:border-purple-800 border bg-purple-100 text-purple-700 rounded-full text-indigo-500"
+                href="category/all"
+              >
+                {tag.name}
+              </a>
+            ))}
           </li>
         </ul>
         <p className="mt-4" dangerouslySetInnerHTML={markup}></p>
