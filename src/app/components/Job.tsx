@@ -31,7 +31,7 @@ export default function Job({ job }: JobProps) {
 Jobs        </h5>
         <a
           href="#"
-          className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
+          className="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-500"
         >
           View all
         </a>
