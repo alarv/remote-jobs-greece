@@ -33,7 +33,8 @@ export default async function Page({ params }: { params: { id: string } }) {
           {/* Apply */}
           <div className="col-end-7 col-span-1 flex md:flex md:flex-grow flex-row justify-end space-x-1 py-3">
             <Link
-              href="/jobs"
+              href={job.acf.job_url}
+              target="_blank"
               className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Apply
@@ -60,7 +61,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             </p>
 
             <svg
-              className="w-6 h-6 text-white dark:text-white"
+              className="w-6 h-6 text-white dark:text-white mr-4"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -76,18 +77,20 @@ export default async function Page({ params }: { params: { id: string } }) {
               />
             </svg>
 
-            <p className="font-semibold text-white">{job.acf.experience}</p>
+            <p className="font-semibold text-white mr-4">
+              {job.acf.experience}
+            </p>
           </div>
         </div>
       </div>
       <div className="py-5 bg-white">
         <div className="mx-auto max-w-5xl px-2 sm:px-6 lg:px-8">
           {/* right part of the page */}
-          <div className="grid grid-cols-5 gap-20 divide-x divide-slate-200">
+          <div className="grid grid-cols-5 gap-20 ">
             <div className="col-span-3">
               <div className="mt-4" dangerouslySetInnerHTML={markup}></div>
             </div>
-            <div className="col-span-2 container divide-x divide-slate-200">
+            <div className="col-span-2 border border-slate-200 border-t-0 border-l-1 border-r-1 border-b-0">
               <div className="mx-4	">
                 <p className=" font-semibold mt-4">
                   Company name: {job.acf.company_name}
