@@ -11,6 +11,7 @@ import {
 } from '@heroicons/react/20/solid';
 import React from 'react';
 import { input } from '@material-tailwind/react';
+import { useSearchParams } from 'next/navigation';
 
 export interface IFilters {
   company_name?: string;
@@ -103,10 +104,10 @@ function classNames(...classes: string[]) {
 }
 
 export function Filters(props: FiltersProps) {
+  const searchParams = useSearchParams();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [filters, setFilters] = useState<IFilters>({});
 
-  // TODO pre-check filters based on the query params
   function getDefaultChecked(
     key: keyof IFilters,
     option: {
@@ -115,7 +116,7 @@ export function Filters(props: FiltersProps) {
       value: string;
     },
   ) {
-    return filters[key] === option.value;
+    return searchParams.get(key) === option.value;
   }
 
   function onFiltersChange(filters: IFilters) {
