@@ -3,6 +3,7 @@
 import React from 'react';
 import { Filters, IFilters } from './Filters';
 import JobListing, { Job } from './JobListing';
+import { useRouter } from 'next/navigation';
 
 interface JobListingProps {
   jobs: Job[];
@@ -11,9 +12,16 @@ interface JobListingProps {
 
 export default function JobListings(props: JobListingProps) {
   const jobs = props.jobs;
+  const router = useRouter();
 
   function filtersChanged(filters: IFilters) {
     props.onFiltersChange && props.onFiltersChange(filters);
+
+    const params = new URLSearchParams({ ...filters });
+    const queryString = params.toString();
+
+    router.replace(`/jobs?${queryString}`);
+    router.refresh();
   }
 
   return (
