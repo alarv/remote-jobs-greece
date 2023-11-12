@@ -106,6 +106,18 @@ export function Filters(props: FiltersProps) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [filters, setFilters] = useState<IFilters>({});
 
+  // TODO pre-check filters based on the query params
+  function getDefaultChecked(
+    key: keyof IFilters,
+    option: {
+      checked: boolean;
+      label: string;
+      value: string;
+    },
+  ) {
+    return filters[key] === option.value;
+  }
+
   function onFiltersChange(filters: IFilters) {
     props.onFiltersChange(filters);
   }
@@ -212,8 +224,11 @@ export function Filters(props: FiltersProps) {
                                       id={`filter-mobile-${section.id}-${optionIdx}`}
                                       name={`${section.id}[]`}
                                       defaultValue={option.value}
-                                      type="checkbox"
-                                      defaultChecked={option.checked}
+                                      type="radio"
+                                      defaultChecked={getDefaultChecked(
+                                        section.id as keyof IFilters,
+                                        option,
+                                      )}
                                       onChange={(event) =>
                                         handleChange(
                                           section.id as keyof IFilters,
@@ -244,7 +259,7 @@ export function Filters(props: FiltersProps) {
           </Dialog>
         </Transition.Root>
 
-        <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <main className="mx-auto max-w-5xl">
           <div className="flex items-baseline justify-between md:border-b border-gray-200 pb-6 pt-9">
             <div className="flex items-center">
               <Menu as="div" className="relative inline-block text-left">
@@ -359,9 +374,19 @@ export function Filters(props: FiltersProps) {
                                   id={`filter-${section.id}-${optionIdx}`}
                                   name={`${section.id}[]`}
                                   defaultValue={option.value}
-                                  type="checkbox"
-                                  defaultChecked={option.checked}
+                                  type="radio"
+                                  defaultChecked={getDefaultChecked(
+                                    section.id as keyof IFilters,
+                                    option,
+                                  )}
                                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                  onChange={(event) =>
+                                    handleChange(
+                                      section.id as keyof IFilters,
+                                      option.value,
+                                      event,
+                                    )
+                                  }
                                 />
                                 <label
                                   htmlFor={`filter-${section.id}-${optionIdx}`}
