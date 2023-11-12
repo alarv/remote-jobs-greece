@@ -19,7 +19,7 @@ export default async function Jobs() {
   const jobs = await getJobs();
   return (
     <>
-      <main className="mx-auto max-w-7xl px-2 py-5 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-5xl py-5 px-2 sm:px-6 lg:px-8">
         <JobListings jobs={jobs} />
       </main>
     </>

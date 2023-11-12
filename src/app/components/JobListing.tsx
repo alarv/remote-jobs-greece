@@ -11,7 +11,6 @@ export interface Job {
   content: {
     rendered: string;
   };
-
   acf: {
     company_name: string;
     employment_type: string[];
@@ -25,6 +24,7 @@ export interface Job {
     working_conditions: {
       rendered: string;
     };
+    job_url: string;
   };
 }
 
@@ -72,7 +72,7 @@ export default function JobListing({ job }: JobProps) {
                 </div>
 
                 <div className="flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                  <p> {job.acf.salary_minimum_range}$</p>
+                  <p> {job.acf.salary_minimum_range}€</p>
                 </div>
               </div>
             </li>
