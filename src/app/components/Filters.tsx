@@ -245,7 +245,7 @@ export function Filters(props: FiltersProps) {
         </Transition.Root>
 
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-baseline justify-between md:border-b border-gray-200 pb-6 pt-4">
+          <div className="flex items-baseline justify-between md:border-b border-gray-200 pb-6 pt-9">
             <div className="flex items-center">
               <Menu as="div" className="relative inline-block text-left">
                 <div>

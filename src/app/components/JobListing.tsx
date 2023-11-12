@@ -11,6 +11,7 @@ export interface Job {
   content: {
     rendered: string;
   };
+
   acf: {
     company_name: string;
     employment_type: string[];
@@ -19,6 +20,11 @@ export interface Job {
     salary_maximum_range: number;
     job_field: string[];
     tags: Tag[];
+    experience: string;
+    languages: string[];
+    working_conditions: {
+      rendered: string;
+    };
   };
 }
 
@@ -34,13 +40,13 @@ export default function JobListing({ job }: JobProps) {
           <h5 className="text-xl leading-none dark:text-white text-gray-700 group-hover:text-indigo-600">
             {job.title.rendered}
           </h5>
-          <p className="bg-purple-100 text-purple-700 rounded-full px-3 py-1 text-sm text-indigo-500 group-hover:text-gray-500  ">
+          <p className="bg-indigo-100 group-hover:bg-indigo-600 text-indigo-700 rounded-full px-3 py-1 text-sm text-indigo-500 group-hover:text-indigo-100  ">
             {job.acf.employment_type}
           </p>
 
           {/*<a*/}
           {/*  href="#"*/}
-          {/*  className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"*/}
+          {/*  className="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-500"*/}
           {/*>*/}
           {/*  View all*/}
           {/*</a>*/}
