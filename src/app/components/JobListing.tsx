@@ -11,7 +11,6 @@ export interface Job {
   content: {
     rendered: string;
   };
-
   acf: {
     company_name: string;
     employment_type: string[];
