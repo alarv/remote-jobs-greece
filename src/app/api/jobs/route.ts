@@ -12,11 +12,6 @@ export async function GET(request: NextRequest) {
       cache: 'no-store',
     });
     const data = await response.json();
-    await new Promise<void>((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, 2000);
-    });
     return Response.json(data);
   } catch (err) {
     console.error('route jobs could not be retrieved');

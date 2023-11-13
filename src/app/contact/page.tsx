@@ -4,7 +4,7 @@ import Header from '@/app/components/Header';
 
 export default function ContactPage() {
   return (
-    <main className="mx-auto max-w-5xl px-2 py-5 sm:px-6 lg:px-8 py-5 pb-52 ">
+    <main className="mx-auto max-w-5xl px-2 py-5 sm:px-6 lg:px-8 py-5 pb-52">
       <h1 className="text-2xl font-semibold mb-4">Contact Us</h1>
       <p className="mb-4">
         We&apos;d love to hear from you! Whether you&apos;re looking for a job
@@ -58,7 +58,8 @@ export default function ContactPage() {
 
         <button
           type="submit"
-          className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded cursor-not-allowed"
+          disabled={true}
         >
           Submit
         </button>
