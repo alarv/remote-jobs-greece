@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             {/* employment type */}
             <div className="inline-flex max-w-5xl col-start-1 col-span-3 py-3">
               <svg
-                className="w-6 h-6 text-white dark:text-white mr-4"
+                className="w-6 h-6 text-white mr-4"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               </p>
 
               <svg
-                className="w-6 h-6 text-white dark:text-white mr-4"
+                className="w-6 h-6 text-white mr-4"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -107,14 +107,15 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <p className="font-semibold">Job field: {job.acf.job_field}</p>
                 <ul className="flex items-start flex-wrap mt-4">
                   <li className="flex mx-1">
-                    {job.acf.tags.map((tag) => (
-                      <p
-                        key={tag.name}
-                        className="bg-indigo-100 text-indigo-700 rounded-full px-3 py-1 ml-1 text-sm text-indigo-500   "
-                      >
-                        {tag.name}
-                      </p>
-                    ))}
+                    {job.acf.tags &&
+                      job.acf.tags.map((tag) => (
+                        <p
+                          key={tag.name}
+                          className="bg-indigo-100 text-indigo-700 rounded-full px-3 py-1 ml-1 text-sm text-indigo-500   "
+                        >
+                          {tag.name}
+                        </p>
+                      ))}
                   </li>
                 </ul>
               </div>
