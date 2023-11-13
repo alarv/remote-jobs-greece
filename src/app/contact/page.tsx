@@ -58,7 +58,8 @@ export default function ContactPage() {
 
         <button
           type="submit"
-          className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded cursor-not-allowed"
+          disabled={true}
         >
           Submit
         </button>
