@@ -190,7 +190,7 @@ export function Filters(props: FiltersProps) {
                       <Disclosure
                         as="div"
                         key={section.id}
-                        className="border-t border-gray-200 px-4 py-6"
+                        className="border-t border-gray-200 px-4 py-3"
                       >
                         {({ open }) => (
                           <>
@@ -214,7 +214,7 @@ export function Filters(props: FiltersProps) {
                                 </span>
                               </Disclosure.Button>
                             </h3>
-                            <Disclosure.Panel className="pt-6">
+                            <Disclosure.Panel className="pt-3">
                               <div className="space-y-6">
                                 {section.options.map((option, optionIdx) => (
                                   <div
@@ -327,7 +327,7 @@ export function Filters(props: FiltersProps) {
 
           <section
             aria-labelledby="products-heading"
-            className="md:pb-24 md:pt-6"
+            className="md:pb-24 md:pt-3"
           >
             <h2 id="products-heading" className="sr-only">
               Products
@@ -340,7 +340,7 @@ export function Filters(props: FiltersProps) {
                   <Disclosure
                     as="div"
                     key={section.id}
-                    className="border-b border-gray-200 py-6"
+                    className="border-b border-gray-200 py-3"
                   >
                     {({ open }) => (
                       <>
@@ -364,7 +364,7 @@ export function Filters(props: FiltersProps) {
                             </span>
                           </Disclosure.Button>
                         </h3>
-                        <Disclosure.Panel className="pt-6">
+                        <Disclosure.Panel className="pt-3">
                           <div className="space-y-4">
                             {section.options.map((option, optionIdx) => (
                               <div

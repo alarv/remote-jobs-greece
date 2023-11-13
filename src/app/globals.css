@@ -38,3 +38,22 @@ body:after {
 body > main {
   margin-bottom: 70px;
 }
+
+/* Job page wordpress */
+
+.job__description .wp-block-heading {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+}
+
+.job__description ul {
+  list-style-type: disc;
+  list-style-position: inside;
+  margin-top: 1rem;
+  margin-left: 1rem;
+}
+
+.job__description ol, .job__description p, .entry-content p, .entry-content ul {
+  margin-bottom: 2rem;
+}

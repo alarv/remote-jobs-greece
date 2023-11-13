@@ -23,10 +23,10 @@ export default async function Page({ params }: { params: { id: string } }) {
   const languagesList = job.acf.languages.join(', ');
 
   return (
-    <main className="mx-auto">
+    <main className="job mx-auto">
       <div className="bg-indigo-600">
         <div className="mx-auto max-w-5xl px-2 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-6 py-6">
+          <div className="grid grid-cols-6 py-4">
             {/* Title */}
             <div className="text-3xl text-white font-semibold col-span-4 py-3">
               {job.title.rendered}
@@ -90,7 +90,10 @@ export default async function Page({ params }: { params: { id: string } }) {
           {/* right part of the page */}
           <div className="grid grid-cols-5 gap-20 ">
             <div className="col-span-3">
-              <div className="mt-4" dangerouslySetInnerHTML={markup}></div>
+              <div
+                className="mt-4 job__description"
+                dangerouslySetInnerHTML={markup}
+              ></div>
             </div>
             <div className="col-span-2 border border-slate-200 border-t-0 border-l-1 border-r-1 border-b-0">
               <div className="mx-4	">
