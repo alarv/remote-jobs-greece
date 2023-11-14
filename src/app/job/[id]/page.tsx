@@ -3,18 +3,46 @@ import React from 'react';
 import { IJob } from '../../components/JobListing';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Metadata, ResolvingMetadata } from 'next';
+import { TemplateString } from 'next/dist/lib/metadata/types/metadata-types';
 
 async function getJob(id: string): Promise<IJob | undefined> {
   const apiURL = process.env.API_URL!;
 
-  const res = await fetch(`${apiURL}/jobs/${id}`, { cache: 'no-store' });
+  const res = await fetch(`${apiURL}/jobs/${id}`, { cache: 'force-cache' });
   if (!res.ok) {
     return undefined;
   }
 
   return res.json();
 }
-export default async function Page({ params }: { params: { id: string } }) {
+
+type Props = {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  // read route params
+  const id = params.id;
+
+  // fetch data
+  const job = await getJob(id);
+
+  return {
+    title: `${job?.title.rendered} | Remote jobs Greece`,
+    openGraph: {
+      title: job?.title.rendered,
+      description: 'Take a look at this remote job position in Greece',
+      images: ['https://i.imgur.com/Tamd8rD.png'],
+    },
+  };
+}
+
+export default async function Page({ params }: Props) {
   const job = await getJob(params.id);
   if (!job) {
     notFound();
