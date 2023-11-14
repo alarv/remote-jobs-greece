@@ -96,10 +96,13 @@ export default async function Page({ params }: { params: { id: string } }) {
                   Company name: {job.acf.company_name}
                 </p>
                 <p className="font-semibold mt-4">
-                  Salary Range: {job.acf.salary_minimum_range}-
-                  {job.acf.salary_maximum_range}$
-                </p>
-
+                     {job.acf.salary_minimum_range > 0 && (
+    <>
+      Salary Range: {job.acf.salary_minimum_range}€
+      {job.acf.salary_time_frame && `/${job.acf.salary_time_frame}`}
+    </>
+  )}
+  </p>
                 <p className="font-semibold">Languages: {languagesList}</p>
                 <p className="font-semibold">Job field: {job.acf.job_field}</p>
                 <ul className="flex items-start flex-wrap mt-4">

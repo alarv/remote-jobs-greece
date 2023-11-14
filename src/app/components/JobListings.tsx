@@ -31,7 +31,7 @@ export default function JobListings(props: JobListingProps) {
         <Filters onFiltersChange={filtersChanged} />
       </div>
       <div className="col-span-2">
-        <div className="w-full bg-white border border-gray-200 rounded-t-lg  shadow px-3 py-8 dark:bg-gray-800 dark:border-gray-700">
+        <div className="w-full bg-white border border-gray-200 sm:p-8 rounded-t-lg  shadow px-3 py-8 dark:bg-gray-800 dark:border-gray-700">
           <div className="flex items-center  justify-between ">
             <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
               Job Postings{' '}

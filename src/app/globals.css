@@ -35,5 +35,6 @@ body:after {
   transform: rotate(45deg);
 }
 
-footer {
+body > main {
+  margin-bottom: 70px;
 }

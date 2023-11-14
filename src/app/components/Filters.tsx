@@ -15,7 +15,6 @@ import { useSearchParams } from 'next/navigation';
 
 export interface IFilters {
   company_name?: string;
-  job_type?: string;
   job_field?: string;
 }
 
@@ -121,6 +120,15 @@ export function Filters(props: FiltersProps) {
 
   function onFiltersChange(filters: IFilters) {
     props.onFiltersChange(filters);
+  }
+  //clear filter
+  function handleClick(key: keyof IFilters) {
+    const updatedFilters: IFilters = { ...filters };
+    delete updatedFilters[key];
+
+    setFilters(updatedFilters);
+    onFiltersChange(updatedFilters);
+
   }
 
   // software, sales, engineering
@@ -347,7 +355,7 @@ export function Filters(props: FiltersProps) {
                         <h3 className="-my-3 flow-root">
                           <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
                             <span className="font-medium text-gray-900">
-                              {section.name}
+                              {section.name}{' '}
                             </span>
                             <span className="ml-6 flex items-center">
                               {open ? (
@@ -366,6 +374,16 @@ export function Filters(props: FiltersProps) {
                         </h3>
                         <Disclosure.Panel className="pt-6">
                           <div className="space-y-4">
+                            <div>
+                              <span
+                                className="font-medium text-indigo-700 text-sm hover:underline"
+                                onClick={() =>
+                                  handleClick(section.id as keyof IFilters)
+                                }
+                              >
+                                Clear
+                              </span>
+                            </div>
                             {section.options.map((option, optionIdx) => (
                               <div
                                 key={option.value}

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export interface IJob {
   id: number;
@@ -13,7 +13,6 @@ export interface IJob {
     employment_type: string[];
     salary_minimum_range: number;
     salary_maximum_range: number;
-    job_type: string;
     job_field: string[];
     job_tag: string[];
   };
@@ -28,7 +27,8 @@ export default function Job({ job }: JobProps) {
     <div className="w-full p-4 bg-white sm:p-8 dark:bg-gray-800 dark:border-gray-700">
       <div className="flex items-center justify-between mb-4">
         <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
-Jobs        </h5>
+          Jobs{' '}
+        </h5>
         <a
           href="#"
           className="text-sm font-medium text-indigo-600 hover:underline dark:text-indigo-500"
@@ -43,20 +43,20 @@ Jobs        </h5>
         >
           <li className="py-3 sm:py-4">
             <div className="flex items-center space-x-4">
-              <div className="flex-shrink-0">
-              </div>
+              <div className="flex-shrink-0"></div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
-                {job.acf.company_name}
+                  {job.acf.company_name}
                 </p>
                 <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-                {job.acf.company_name}                </p>
+                  {job.acf.company_name}{' '}
+                </p>
               </div>
               <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-              <p>  {job.acf.salary_minimum_range}</p>
+                <p> {job.acf.salary_minimum_range}</p>
               </div>
-              </div>
-              </li>
+            </div>
+          </li>
         </ul>
       </div>
     </div>
@@ -65,4 +65,3 @@ Jobs        </h5>
 function newFunction(job: IJob) {
   return job.title;
 }
-
