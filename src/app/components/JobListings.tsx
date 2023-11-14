@@ -42,9 +42,7 @@ export default function JobListings(props: JobListingProps) {
           </div>
         </div>
         <div className="border shadow border-gray-200 rounded-b-lg grid grid-cols-1 divide-y divide-gray-100">
-          {jobs.map((job) => (
-            <JobListing key={job.id} job={job} />
-          ))}
+          {jobs && jobs.map((job) => <JobListing key={job.id} job={job} />)}
         </div>
         <div>
           <Pagination
