@@ -1,5 +1,4 @@
 import { NextRequest } from 'next/server';
-import { isDevEnvironment } from '@/app/util/env.util';
 import { IJob } from '@/app/components/JobListing';
 
 export interface JobsResponse {
@@ -13,11 +12,12 @@ export async function GET(request: NextRequest) {
 
   const searchParams = request.nextUrl.searchParams;
   const queryString = searchParams.toString();
+  console.log(queryString);
 
   try {
     const url = `${apiURL}/jobs?${queryString}`;
     const res = await fetch(url, {
-      cache: isDevEnvironment() ? 'no-store' : 'force-cache',
+      cache: 'force-cache',
     });
     const { headers } = res;
     const data = await res.json();

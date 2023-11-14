@@ -8,12 +8,13 @@ import { JobsResponse } from '@/app/api/jobs/route';
 async function getJobs(filters: IFilters = {}): Promise<JobsResponse> {
   const params = new URLSearchParams({ ...filters });
   const queryString = params.toString();
+  console.log(queryString);
 
   try {
     const response = await fetch(
       `${process.env.LOCATION_ORIGIN}/api/jobs?${queryString}`,
       {
-        cache: isDevEnvironment() ? 'no-store' : 'force-cache',
+        cache: 'force-cache',
       },
     );
 
