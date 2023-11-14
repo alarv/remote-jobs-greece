@@ -12,7 +12,7 @@ async function getJobs(filters: IFilters = {}): Promise<JobsResponse> {
   try {
     const response = await fetch(
       `${process.env.LOCATION_ORIGIN}/api/jobs?${queryString}`,
-      { cache: 'force-cache' },
+      { cache: 'no-store' },
     );
 
     return response.json();
