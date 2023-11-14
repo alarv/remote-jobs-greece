@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import React from 'react';
 import { IJob } from '../../components/JobListing';
 import Link from 'next/link';
+import Image from 'next/image';
 
 async function getJob(id: string): Promise<IJob | undefined> {
   const apiURL = process.env.API_URL!;
@@ -99,11 +100,18 @@ export default async function Page({ params }: { params: { id: string } }) {
               <div className="mx-4">
                 <div className="flex">
                   {job.acf.company_logo && (
-                    <img className="w-14" src={job.acf.company_logo} alt="" />
+                    <Image
+                      className="w-25 mr-2"
+                      src={job.acf.company_logo}
+                      alt=""
+                      width={100}
+                      height={100}
+                    />
                   )}
-
-                  <p className="font-semibold mt-4">{job.acf.company_name}</p>
                 </div>
+                <p className="font-semibold mt-4">
+                  Company: {job.acf.company_name}
+                </p>
                 <p className="font-semibold mt-4">
                   Salary Range:{' '}
                   {job.acf.salary_minimum_range.toLocaleString('en')}-
