@@ -1,14 +1,11 @@
 'use client';
 
 import { Disclosure } from '@headlessui/react';
-import {
-  Bars3Icon,
-  BriefcaseIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
+import Image from 'next/image';
 
 const navigation = [
   { name: 'Remote jobs Greece', href: '/', current: true },
@@ -45,9 +42,13 @@ export default function Header() {
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
                   <Link href="/">
-                    <BriefcaseIcon
-                      className="block h-6 w-6 text-white"
-                      aria-hidden="true"
+                    <Image
+                      className="h-8 w-auto"
+                      src="https://i.imgur.com/Tamd8rD.png"
+                      width={45}
+                      height={45}
+                      style={{ 'border-radius': '50%' }}
+                      alt="Remote jobs Greece logo"
                     />
                   </Link>
                 </div>
