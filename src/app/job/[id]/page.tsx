@@ -35,7 +35,7 @@ export async function generateMetadata(
   return {
     title: `${job?.title.rendered} | Remote jobs Greece`,
     openGraph: {
-      title: job?.title.rendered,
+      title: `${job?.title.rendered} | Remote jobs Greece`,
       description: 'Take a look at this remote job position in Greece',
       images: ['https://i.imgur.com/Tamd8rD.png'],
     },
