@@ -34,8 +34,6 @@ export default async function Jobs({
   const response = await getJobs(searchParams);
   const { data: jobs, total, totalPages } = response;
 
-  console.log('jobs', jobs);
-
   return (
     <>
       <main className="mx-auto max-w-5xl py-5 px-2 sm:px-6 lg:px-8">

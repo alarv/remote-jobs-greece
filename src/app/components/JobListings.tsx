@@ -24,8 +24,7 @@ export default function JobListings(props: JobListingProps) {
     const params = new URLSearchParams({ ...filters });
     const queryString = params.toString();
 
-    router.replace(`/jobs?${queryString}`);
-    router.refresh();
+    router.push(`/jobs?${queryString}`);
   }
 
   return (
