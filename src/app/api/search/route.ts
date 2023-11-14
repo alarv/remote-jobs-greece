@@ -1,5 +1,4 @@
 import { NextRequest } from 'next/server';
-import { isDevEnvironment } from '@/app/util/env.util';
 
 export async function GET(request: NextRequest) {
   const apiURL = process.env.API_URL!;
@@ -11,7 +10,7 @@ export async function GET(request: NextRequest) {
   try {
     const url = `${apiURL}/search?${queryString}`;
     const response = await fetch(url, {
-      cache: isDevEnvironment() ? 'no-store' : 'force-cache',
+      cache: 'force-cache',
     });
     const data = await response.json();
     return Response.json(data);
