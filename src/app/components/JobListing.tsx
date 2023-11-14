@@ -3,7 +3,7 @@ import React from 'react';
 export interface Tag {
   name: string;
 }
-export interface Job {
+export interface IJob {
   id: number;
   title: {
     rendered: string;
@@ -29,7 +29,7 @@ export interface Job {
 }
 
 interface JobProps {
-  job: Job;
+  job: IJob;
 }
 
 export default function JobListing({ job }: JobProps) {

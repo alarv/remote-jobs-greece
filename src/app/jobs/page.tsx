@@ -1,10 +1,11 @@
 import React from 'react';
 import JobListings from '../components/JobListings';
-import { Job } from '../components/JobListing';
+import { IJob } from '../components/JobListing';
 import { IFilters } from '../components/Filters';
 import { isDevEnvironment } from '@/app/util/env.util';
+import { JobsResponse } from '@/app/api/jobs/route';
 
-async function getJobs(filters: IFilters = {}): Promise<Job[]> {
+async function getJobs(filters: IFilters = {}): Promise<JobsResponse> {
   const params = new URLSearchParams({ ...filters });
   const queryString = params.toString();
 
@@ -15,10 +16,15 @@ async function getJobs(filters: IFilters = {}): Promise<Job[]> {
         cache: isDevEnvironment() ? 'no-store' : 'force-cache',
       },
     );
+
     return response.json();
   } catch (err) {
     console.error('page jobs could not be retrieved');
-    return [];
+    return {
+      total: 0,
+      totalPages: 1,
+      data: [],
+    };
   }
 }
 
@@ -27,12 +33,13 @@ export default async function Jobs({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const jobs = await getJobs(searchParams);
+  const response = await getJobs(searchParams);
+  const { data: jobs, total, totalPages } = response;
 
   return (
     <>
       <main className="mx-auto max-w-5xl py-5 px-2 sm:px-6 lg:px-8">
-        <JobListings jobs={jobs} />
+        <JobListings jobs={jobs} total={total} totalPages={totalPages} />
       </main>
     </>
   );

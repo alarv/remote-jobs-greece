@@ -1,9 +1,9 @@
 import { notFound } from 'next/navigation';
 import React from 'react';
-import { Job } from '../../components/JobListing';
+import { IJob } from '../../components/JobListing';
 import Link from 'next/link';
 
-async function getJob(id: string): Promise<Job | undefined> {
+async function getJob(id: string): Promise<IJob | undefined> {
   const apiURL = process.env.API_URL!;
 
   const res = await fetch(`${apiURL}/jobs/${id}`, { cache: 'no-store' });

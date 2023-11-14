@@ -1,19 +1,22 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Filters, IFilters } from './Filters';
-import JobListing, { Job } from './JobListing';
+import JobListing, { IJob } from './JobListing';
 import { useRouter } from 'next/navigation';
 import Pagination from './Pagination';
 
 interface JobListingProps {
-  jobs: Job[];
+  jobs: IJob[];
+  total: number;
+  totalPages: number;
   onFiltersChange?: (filters: IFilters) => void;
 }
 
 export default function JobListings(props: JobListingProps) {
   const jobs = props.jobs;
   const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(1);
 
   function filtersChanged(filters: IFilters) {
     props.onFiltersChange && props.onFiltersChange(filters);
@@ -44,7 +47,11 @@ export default function JobListings(props: JobListingProps) {
           ))}
         </div>
         <div>
-          <Pagination />
+          <Pagination
+            currentPage={currentPage}
+            total={props.total}
+            totalPages={props.totalPages}
+          />
         </div>
       </div>
     </main>

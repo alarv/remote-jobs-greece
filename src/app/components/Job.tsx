@@ -1,23 +1,5 @@
 import React from 'react';
-
-export interface IJob {
-  id: number;
-  title: {
-    rendered: string;
-  };
-  content: {
-    rendered: string;
-  };
-  acf: {
-    company_name: string;
-    employment_type: string[];
-    salary_minimum_range: number;
-    salary_maximum_range: number;
-    job_type: string;
-    job_field: string[];
-    job_tag: string[];
-  };
-}
+import { IJob } from '@/app/components/JobListing';
 
 interface JobProps {
   job: IJob;
