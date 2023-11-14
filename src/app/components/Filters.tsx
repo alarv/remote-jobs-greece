@@ -122,6 +122,14 @@ export function Filters(props: FiltersProps) {
   function onFiltersChange(filters: IFilters) {
     props.onFiltersChange(filters);
   }
+  //clear filter
+  function handleClick(key: keyof IFilters) {
+    const updatedFilters: IFilters = { ...filters };
+    delete updatedFilters[key];
+
+    setFilters(updatedFilters);
+    onFiltersChange(updatedFilters);
+  }
 
   // software, sales, engineering
   function handleChange(
@@ -366,6 +374,16 @@ export function Filters(props: FiltersProps) {
                         </h3>
                         <Disclosure.Panel className="pt-3">
                           <div className="space-y-4">
+                          <div>
+                              <span
+                                className="font-medium text-indigo-700 text-sm hover:underline"
+                                onClick={() =>
+                                  handleClick(section.id as keyof IFilters)
+                                }
+                              >
+                                Clear
+                              </span>
+                            </div>
                             {section.options.map((option, optionIdx) => (
                               <div
                                 key={option.value}

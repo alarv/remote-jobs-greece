@@ -104,11 +104,30 @@ export default async function Page({ params }: { params: { id: string } }) {
 
                   <p className="font-semibold mt-4">{job.acf.company_name}</p>
                 </div>
-                <p className="font-semibold mt-4">
-                  Salary Range:{' '}
-                  {job.acf.salary_minimum_range.toLocaleString('en')}-
-                  {job.acf.salary_maximum_range.toLocaleString('en')}€
-                </p>
+                {job.acf.salary_minimum_range !== null &&
+                  job.acf.salary_maximum_range !== null && (
+                    <p className="font-semibold mt-4">
+                      Salary Range:{' '}
+                      {job.acf.salary_minimum_range.toLocaleString('en')}-
+                      {job.acf.salary_maximum_range.toLocaleString('en')}€
+                    </p>
+                  )}
+
+                {job.acf.salary_minimum_range === null &&
+                  job.acf.salary_maximum_range !== null && (
+                    <p className="font-semibold mt-4">
+                      Salary Range:{' '}
+                      {job.acf.salary_maximum_range.toLocaleString('en')}€
+                    </p>
+                  )}
+
+                {job.acf.salary_minimum_range !== null &&
+                  job.acf.salary_maximum_range === null && (
+                    <p className="font-semibold mt-4">
+                      Salary Range:{' '}
+                      {job.acf.salary_minimum_range.toLocaleString('en')}€
+                    </p>
+                  )}
 
                 <p className="font-semibold">Languages: {languagesList}</p>
                 <p className="font-semibold">Job field: {job.acf.job_field}</p>
