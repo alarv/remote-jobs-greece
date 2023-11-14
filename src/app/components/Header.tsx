@@ -47,7 +47,7 @@ export default function Header() {
                       src="https://i.imgur.com/Tamd8rD.png"
                       width={45}
                       height={45}
-                      style={{ 'border-radius': '50%' }}
+                      style={{ borderRadius: '50%' }}
                       alt="Remote jobs Greece logo"
                     />
                   </Link>
