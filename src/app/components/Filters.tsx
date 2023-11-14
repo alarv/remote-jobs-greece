@@ -237,7 +237,7 @@ export function Filters(props: FiltersProps) {
                                           event,
                                         )
                                       }
-                                      className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-gray-800 focus:ring-2"
+                                      className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 focus:ring-indigo-500 focus:ring-2"
                                     />
                                     <label
                                       htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
@@ -380,7 +380,7 @@ export function Filters(props: FiltersProps) {
                                     section.id as keyof IFilters,
                                     option,
                                   )}
-                                  className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-gray-800 focus:ring-2"
+                                  className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 focus:ring-indigo-500 focus:ring-2"
                                   onChange={(event) =>
                                     handleChange(
                                       section.id as keyof IFilters,

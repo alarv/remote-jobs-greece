@@ -96,13 +96,13 @@ export default async function Page({ params }: { params: { id: string } }) {
               ></div>
             </div>
             <div className="col-span-2 border border-slate-200 border-t-0 border-l-1 border-r-1 border-b-0">
-              <div className="mx-4 	">
-                <div className='flex'>
-              {job.acf.company_logo && <img className='w-14   ' src={job.acf.company_logo} alt="" />}
+              <div className="mx-4">
+                <div className="flex">
+                  {job.acf.company_logo && (
+                    <img className="w-14" src={job.acf.company_logo} alt="" />
+                  )}
 
-                <p className=" font-semibold mt-4">
-                   {job.acf.company_name}
-                </p>
+                  <p className="font-semibold mt-4">{job.acf.company_name}</p>
                 </div>
                 <p className="font-semibold mt-4">
                   Salary Range:{' '}
