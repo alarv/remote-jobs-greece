@@ -2,7 +2,6 @@ import React from 'react';
 import JobListings from '../components/JobListings';
 import { IJob } from '../components/JobListing';
 import { IFilters } from '../components/Filters';
-import { isDevEnvironment } from '@/app/util/env.util';
 import { JobsResponse } from '@/app/api/jobs/route';
 
 async function getJobs(filters: IFilters = {}): Promise<JobsResponse> {
