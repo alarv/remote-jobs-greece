@@ -2,6 +2,7 @@ import React from 'react';
 import JobListings from '../components/JobListings';
 import { Job } from '../components/JobListing';
 import { IFilters } from '../components/Filters';
+import { isDevEnvironment } from '@/app/util/env.util';
 
 async function getJobs(filters: IFilters = {}): Promise<Job[]> {
   const params = new URLSearchParams({ ...filters });
@@ -11,7 +12,7 @@ async function getJobs(filters: IFilters = {}): Promise<Job[]> {
     const response = await fetch(
       `${process.env.LOCATION_ORIGIN}/api/jobs?${queryString}`,
       {
-        cache: 'no-store',
+        cache: isDevEnvironment() ? 'no-store' : 'force-cache',
       },
     );
     return response.json();
