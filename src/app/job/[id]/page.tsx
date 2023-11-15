@@ -4,12 +4,14 @@ import { IJob } from '../../components/JobListing';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Metadata, ResolvingMetadata } from 'next';
-import { TemplateString } from 'next/dist/lib/metadata/types/metadata-types';
+import { isDevEnvironment } from '@/app/util/env.util';
 
 async function getJob(id: string): Promise<IJob | undefined> {
   const apiURL = process.env.API_URL!;
 
-  const res = await fetch(`${apiURL}/jobs/${id}`, { cache: 'force-cache' });
+  const res = await fetch(`${apiURL}/jobs/${id}`, {
+    cache: isDevEnvironment() ? 'no-cache' : 'force-cache',
+  });
   if (!res.ok) {
     return undefined;
   }
@@ -137,7 +139,9 @@ export default async function Page({ params }: Props) {
                     />
                   )}
                 </div>
-                <p className="font-semibold mt-4">Company: {job.acf.company_name}</p>
+                <p className="font-semibold mt-4">
+                  Company: {job.acf.company_name}
+                </p>
 
                 {job.acf.salary_minimum_range !== null &&
                   job.acf.salary_maximum_range !== null && (
