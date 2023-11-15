@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 export interface Tag {
   name: string;
@@ -39,7 +40,13 @@ export default function JobListing({ job }: JobProps) {
     <a href={`/job/${job.id}`}>
       <div className="w-full grid grid-cols-3 gap-0 mb-1 px-4 py-4 sm:px-6 bg-white rounded-b-lg border-hidden group hover:bg-indigo-50 hover:shadow-lg hover:border-indigo-500">
         {job.acf.company_logo && (
-          <img className="w-14 col-end-1  " src={job.acf.company_logo} alt="" />
+          <Image
+            className="col-end-1 mr-3"
+            src={job.acf.company_logo}
+            alt=""
+            width={64}
+            height={64}
+          />
         )}
 
         <div className="col-start-1 col-span-3">
@@ -51,7 +58,7 @@ export default function JobListing({ job }: JobProps) {
           </p>
           <div className="items-center flex">
             <svg
-              className="w-3.5 h-3.5 text-gray-800"
+              className="w-3.5 h-3.5 text-gray-800 mr-1"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"

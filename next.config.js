@@ -12,6 +12,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'hug.ntb.mybluehost.me',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };
