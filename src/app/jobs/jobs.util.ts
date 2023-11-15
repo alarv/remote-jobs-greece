@@ -9,7 +9,7 @@ type WhiteListedFilterKeys = {
 
 const FILTER_WHITELISTED_KEYS: WhiteListedFilterKeys = {
   company_name: true,
-  job_type: true,
+  employment_type: true,
   job_field: true,
 };
 

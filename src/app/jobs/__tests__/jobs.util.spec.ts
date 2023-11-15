@@ -11,7 +11,7 @@ describe('jobs util', () => {
         job_field: 'software',
       }),
     ).toStrictEqual({
-      filters_job_field: 'software',
+      filter_job_field: 'software',
     });
   });
 
@@ -22,7 +22,7 @@ describe('jobs util', () => {
         page: 2,
       }),
     ).toStrictEqual({
-      filters_job_field: 'software',
+      filter_job_field: 'software',
       page: 2,
     });
   });
