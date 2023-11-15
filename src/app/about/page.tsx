@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     'Learn more about RemoteJobsGreece.gr and our mission to connect job seekers and employers in Greece.',
   openGraph: {
-    images: ['/some-specific-page-image.jpg'],
+    images: ['https://i.imgur.com/Tamd8rD.png'],
   },
 };
 

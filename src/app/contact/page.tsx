@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     'Get in touch with RemoteJobsGreece.gr. Find our contact information and reach out for any inquiries or collaborations.',
   openGraph: {
-    images: ['/some-specific-page-image.jpg'],
+    images: ['https://i.imgur.com/Tamd8rD.png'],
   },
 };
 export default function ContactPage() {
