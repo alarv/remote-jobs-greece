@@ -4,12 +4,14 @@ import { IJob } from '../../components/JobListing';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Metadata, ResolvingMetadata } from 'next';
-import { TemplateString } from 'next/dist/lib/metadata/types/metadata-types';
+import { isDevEnvironment } from '@/app/util/env.util';
 
 async function getJob(id: string): Promise<IJob | undefined> {
   const apiURL = process.env.API_URL!;
 
-  const res = await fetch(`${apiURL}/jobs/${id}`, { cache: 'force-cache' });
+  const res = await fetch(`${apiURL}/jobs/${id}`, {
+    cache: isDevEnvironment() ? 'no-cache' : 'force-cache',
+  });
   if (!res.ok) {
     return undefined;
   }
@@ -140,11 +142,31 @@ export default async function Page({ params }: Props) {
                 <p className="font-semibold mt-4">
                   Company: {job.acf.company_name}
                 </p>
-                <p className="font-semibold mt-4">
-                  Salary Range:{' '}
-                  {job.acf.salary_minimum_range.toLocaleString('en')}-
-                  {job.acf.salary_maximum_range.toLocaleString('en')}€
-                </p>
+
+                {job.acf.salary_minimum_range > 0 &&
+                  job.acf.salary_maximum_range > 0 && (
+                    <p className="font-semibold mt-4">
+                      Salary Range:{' '}
+                      {job.acf.salary_minimum_range.toLocaleString('en')}-
+                      {job.acf.salary_maximum_range.toLocaleString('en')}€
+                    </p>
+                  )}
+
+                {job.acf.salary_minimum_range === null &&
+                  job.acf.salary_maximum_range > 0 && (
+                    <p className="font-semibold mt-4">
+                      Salary Range:{' '}
+                      {job.acf.salary_maximum_range.toLocaleString('en')}€
+                    </p>
+                  )}
+
+                {job.acf.salary_minimum_range > 0 &&
+                  job.acf.salary_maximum_range === null && (
+                    <p className="font-semibold mt-4">
+                      Salary Range:{' '}
+                      {job.acf.salary_minimum_range.toLocaleString('en')}€
+                    </p>
+                  )}
 
                 <p className="font-semibold">Languages: {languagesList}</p>
                 <p className="font-semibold">Job field: {job.acf.job_field}</p>
