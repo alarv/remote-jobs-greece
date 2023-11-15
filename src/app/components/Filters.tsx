@@ -14,9 +14,9 @@ import { input } from '@material-tailwind/react';
 import { useSearchParams } from 'next/navigation';
 
 export interface IFilters {
-  company_name?: string | string[];
+  company_name?: string;
   employment_type?: string;
-  job_field?: string | string[];
+  job_field?: string;
 }
 
 interface FiltersProps {
