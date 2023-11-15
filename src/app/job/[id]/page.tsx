@@ -57,7 +57,7 @@ export default async function Page({ params }: Props) {
     <main className="job mx-auto">
       <div className="bg-indigo-600">
         <div className="mx-auto max-w-5xl px-2 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-6 py-4">
+          <div className="grid grid-cols-6 py-4 pl-2 sm:pl-0">
             {/* Title */}
             <div className="text-3xl text-white font-semibold col-span-4 py-3">
               {job.title.rendered}
@@ -73,7 +73,7 @@ export default async function Page({ params }: Props) {
               </Link>
             </div>
             {/* employment type */}
-            <div className="inline-flex max-w-5xl col-start-1 col-span-3 py-3">
+            <div className="inline-flex max-w-5xl col-start-1 col-span-4 py-3">
               <svg
                 className="w-6 h-6 text-white mr-4"
                 aria-hidden="true"
@@ -119,16 +119,16 @@ export default async function Page({ params }: Props) {
       <div className="py-5">
         <div className="mx-auto max-w-5xl px-2 sm:px-6 lg:px-8">
           {/* right part of the page */}
-          <div className="grid grid-cols-5 gap-20 ">
+          <div className="grid grid-cols-5 gap-5 ">
             <div className="col-span-3">
               <div
-                className="mt-4 job__description"
+                className="pl-2 sm:pl-0 mt-4 job__description"
                 dangerouslySetInnerHTML={markup}
               ></div>
             </div>
             <div className="col-span-2 border border-slate-200 border-t-0 border-l-1 border-r-1 border-b-0">
               <div className="mx-4">
-                <div className="flex">
+                <div className="text-center">
                   {job.acf.company_logo && (
                     <Image
                       className="w-25 mr-2"

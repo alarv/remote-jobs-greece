@@ -1,5 +1,5 @@
 'use client';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import {
@@ -14,9 +14,9 @@ import { input } from '@material-tailwind/react';
 import { useSearchParams } from 'next/navigation';
 
 export interface IFilters {
-  company_name?: string;
-  job_type?: string;
-  job_field?: string;
+  company_name?: string | string[];
+  employment_type?: string;
+  job_field?: string | string[];
 }
 
 interface FiltersProps {
@@ -31,7 +31,14 @@ const sortOptions = [
   { name: 'Price: High to Low', href: '#', current: false },
 ];
 
-const filtersContent = [
+type FilterContentOption = { checked: boolean; label: string; value: string };
+type FilterContent = {
+  name: string;
+  options: FilterContentOption[];
+  id: string;
+};
+
+const DEFAULT_FILTERS_CONTENT: FilterContent[] = [
   {
     id: 'job_field',
     name: 'Job Field',
@@ -107,27 +114,35 @@ export function Filters(props: FiltersProps) {
   const searchParams = useSearchParams();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [filters, setFilters] = useState<IFilters>({});
+  const [filtersContent, setFiltersContent] = useState(DEFAULT_FILTERS_CONTENT);
 
-  function getDefaultChecked(
-    key: keyof IFilters,
-    option: {
-      checked: boolean;
-      label: string;
-      value: string;
-    },
-  ) {
-    return searchParams.get(key) === option.value;
-  }
+  useEffect(() => {
+    setFiltersContent((currentFiltersContent) =>
+      currentFiltersContent.map((filterContent) => {
+        const newOptions = filterContent.options.map((option) => {
+          const shouldBeChecked =
+            searchParams.get(filterContent.id) === option.value;
+          return {
+            ...option,
+            checked: shouldBeChecked,
+          };
+        });
+
+        return { ...filterContent, options: newOptions };
+      }),
+    );
+  }, [searchParams]);
 
   function onFiltersChange(filters: IFilters) {
     props.onFiltersChange(filters);
   }
   //clear filter
-  function handleClick(key: keyof IFilters) {
+  function clearFilters(key: keyof IFilters) {
     const updatedFilters: IFilters = { ...filters };
     delete updatedFilters[key];
 
     setFilters(updatedFilters);
+    searchParams;
     onFiltersChange(updatedFilters);
   }
 
@@ -234,10 +249,7 @@ export function Filters(props: FiltersProps) {
                                       name={`${section.id}[]`}
                                       defaultValue={option.value}
                                       type="radio"
-                                      defaultChecked={getDefaultChecked(
-                                        section.id as keyof IFilters,
-                                        option,
-                                      )}
+                                      checked={option.checked}
                                       onChange={(event) =>
                                         handleChange(
                                           section.id as keyof IFilters,
@@ -374,11 +386,11 @@ export function Filters(props: FiltersProps) {
                         </h3>
                         <Disclosure.Panel className="pt-3">
                           <div className="space-y-4">
-                          <div>
+                            <div>
                               <span
-                                className="font-medium text-indigo-700 text-sm hover:underline"
+                                className="font-medium text-indigo-700 text-sm cursor-pointer hover:underline"
                                 onClick={() =>
-                                  handleClick(section.id as keyof IFilters)
+                                  clearFilters(section.id as keyof IFilters)
                                 }
                               >
                                 Clear
@@ -394,10 +406,7 @@ export function Filters(props: FiltersProps) {
                                   name={`${section.id}[]`}
                                   defaultValue={option.value}
                                   type="radio"
-                                  defaultChecked={getDefaultChecked(
-                                    section.id as keyof IFilters,
-                                    option,
-                                  )}
+                                  checked={option.checked}
                                   className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 focus:ring-indigo-500 focus:ring-2"
                                   onChange={(event) =>
                                     handleChange(

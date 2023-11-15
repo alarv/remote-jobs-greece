@@ -13,7 +13,6 @@ export async function GET(request: NextRequest) {
 
   const searchParams = request.nextUrl.searchParams;
   const queryString = searchParams.toString();
-  console.log(queryString);
 
   try {
     const url = `${apiURL}/jobs?${queryString}`;

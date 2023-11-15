@@ -20,7 +20,6 @@ async function getJobs(filters: IFilters = {}): Promise<JobsResponse> {
     ...prefixFilterKeysWithFilters(filters),
   });
   const queryString = params.toString();
-  console.log(queryString);
 
   try {
     const response = await fetch(
