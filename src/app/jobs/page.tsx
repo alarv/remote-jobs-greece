@@ -4,6 +4,7 @@ import { IJob } from '../components/JobListing';
 import { IFilters } from '../components/Filters';
 import { JobsResponse } from '@/app/api/jobs/route';
 import { Metadata } from 'next';
+import { prefixFilterKeysWithFilters } from '@/app/jobs/jobs.util';
 
 export const metadata: Metadata = {
   title: 'Remote Jobs in Greece - Find and Apply for Remote Work',
@@ -15,7 +16,9 @@ export const metadata: Metadata = {
 };
 
 async function getJobs(filters: IFilters = {}): Promise<JobsResponse> {
-  const params = new URLSearchParams({ ...filters });
+  const params = new URLSearchParams({
+    ...prefixFilterKeysWithFilters(filters),
+  });
   const queryString = params.toString();
   console.log(queryString);
 
