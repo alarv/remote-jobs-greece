@@ -3,7 +3,7 @@ import { isDevEnvironment } from '@/app/util/env.util';
 import rateLimit from '@/app/util/rate-limit.util';
 
 const REQUEST_RATE_LIMIT = 10;
-const REQUEST_TIME_WINDOW_IN_MS = 60 * 1000 * 10; // 10 minutes
+const REQUEST_TIME_WINDOW_IN_MS = 60 * 1000; // 60 seconds
 
 const limiter = rateLimit({
   interval: REQUEST_TIME_WINDOW_IN_MS, // 10 minutes
