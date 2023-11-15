@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: 'Remote jobs Greece - Find and Post Remote Jobs in Greece',
   description:
     'Unlock a world of remote work opportunities in Greece with RemoteJobsGreece.gr. Browse listings for freelance, part-time, and full-time remote jobs, or post your own job openings to connect with top talent. Your next career move starts here.',
+openGraph: {
+  images: ['/some-specific-page-image.jpg']
+}
 };
 
 const interFont = Inter({

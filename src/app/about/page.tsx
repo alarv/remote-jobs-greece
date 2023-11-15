@@ -2,9 +2,12 @@ import React from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title:'About Remote Jobs Greece',
-  description:'Learn more about RemoteJobsGreece.gr and our mission to connect job seekers and employers in Greece.'
-
+  title: 'About Remote Jobs Greece',
+  description:
+    'Learn more about RemoteJobsGreece.gr and our mission to connect job seekers and employers in Greece.',
+  openGraph: {
+    images: ['/some-specific-page-image.jpg'],
+  },
 };
 
 export default function About() {

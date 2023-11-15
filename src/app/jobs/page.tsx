@@ -6,9 +6,13 @@ import { JobsResponse } from '@/app/api/jobs/route';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title:'Remote Jobs in Greece - Find and Apply for Remote Work',
-  description:'Explore a variety of remote job opportunities in Greece with RemoteJobsGreece.gr.'
-  }
+  title: 'Remote Jobs in Greece - Find and Apply for Remote Work',
+  description:
+    'Explore a variety of remote job opportunities in Greece with RemoteJobsGreece.gr.',
+  openGraph: {
+    images: ['/some-specific-page-image.jpg'],
+  },
+};
 
 async function getJobs(filters: IFilters = {}): Promise<JobsResponse> {
   const params = new URLSearchParams({ ...filters });
