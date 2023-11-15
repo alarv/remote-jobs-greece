@@ -143,8 +143,8 @@ export default async function Page({ params }: Props) {
                   Company: {job.acf.company_name}
                 </p>
 
-                {job.acf.salary_minimum_range !== null &&
-                  job.acf.salary_maximum_range !== null && (
+                {job.acf.salary_minimum_range > 0 &&
+                  job.acf.salary_maximum_range > 0 && (
                     <p className="font-semibold mt-4">
                       Salary Range:{' '}
                       {job.acf.salary_minimum_range.toLocaleString('en')}-
@@ -153,14 +153,14 @@ export default async function Page({ params }: Props) {
                   )}
 
                 {job.acf.salary_minimum_range === null &&
-                  job.acf.salary_maximum_range !== null && (
+                  job.acf.salary_maximum_range > 0 && (
                     <p className="font-semibold mt-4">
                       Salary Range:{' '}
                       {job.acf.salary_maximum_range.toLocaleString('en')}€
                     </p>
                   )}
 
-                {job.acf.salary_minimum_range !== null &&
+                {job.acf.salary_minimum_range > 0 &&
                   job.acf.salary_maximum_range === null && (
                     <p className="font-semibold mt-4">
                       Salary Range:{' '}

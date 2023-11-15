@@ -76,7 +76,7 @@ export default function JobListing({ job }: JobProps) {
             {job.acf.employment_type}
           </p>
           <p className="text-sm text-gray-900 truncate px-1">
-            {job.acf.salary_minimum_range !== null && (
+            {job.acf.salary_minimum_range >0 && (
               <>
                 {job.acf.salary_minimum_range}€
                 {job.acf.salary_time_frame && `/${job.acf.salary_time_frame}`}
