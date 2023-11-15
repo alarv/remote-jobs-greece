@@ -3,6 +3,12 @@ import JobListings from '../components/JobListings';
 import { IJob } from '../components/JobListing';
 import { IFilters } from '../components/Filters';
 import { JobsResponse } from '@/app/api/jobs/route';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title:'Remote Jobs in Greece - Find and Apply for Remote Work',
+  description:'Explore a variety of remote job opportunities in Greece with RemoteJobsGreece.gr.'
+  }
 
 async function getJobs(filters: IFilters = {}): Promise<JobsResponse> {
   const params = new URLSearchParams({ ...filters });
