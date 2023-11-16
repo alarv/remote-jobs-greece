@@ -1,9 +1,21 @@
 import { LRUCache } from 'lru-cache';
+import { NextRequest } from 'next/server';
 
 type Options = {
   uniqueTokenPerInterval?: number;
   interval?: number;
 };
+
+export function retrieveIp(req: NextRequest): string | null {
+  let ipAddress = req.ip || req.headers.get('x-real-ip');
+
+  const forwardedFor = req.headers.get('x-forwarded-for');
+  if (!ipAddress && forwardedFor) {
+    ipAddress = forwardedFor?.split(',').at(0) ?? 'Unknown';
+  }
+
+  return ipAddress;
+}
 
 export default function rateLimit(options?: Options) {
   const tokenCache = new LRUCache({
@@ -12,10 +24,10 @@ export default function rateLimit(options?: Options) {
   });
 
   return {
-    check: (limit: number, token: string) => {
-      const tokenCount = (tokenCache.get(token) as number[]) || [0];
+    check: (limit: number, cacheKey: string) => {
+      const tokenCount = (tokenCache.get(cacheKey) as number[]) || [0];
       if (tokenCount[0] === 0) {
-        tokenCache.set(token, tokenCount);
+        tokenCache.set(cacheKey, tokenCount);
       }
       tokenCount[0] += 1;
 
