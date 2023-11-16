@@ -9,7 +9,7 @@ import { isDevEnvironment } from '@/app/util/env.util';
 async function getJob(id: string): Promise<IJob | undefined> {
   const apiURL = process.env.API_URL!;
 
-  const res = await fetch(`${apiURL}/jobs/${id}`, {
+  const res = await fetch(`${apiURL}/wp-json/wp/v2/jobs/${id}`, {
     cache: isDevEnvironment() ? 'no-cache' : 'force-cache',
   });
   if (!res.ok) {

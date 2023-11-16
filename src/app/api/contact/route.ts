@@ -4,19 +4,15 @@ import rateLimit, { retrieveIp } from '@/app/util/rate-limit.util';
 
 const REQUEST_RATE_LIMIT = 10;
 const REQUEST_TIME_WINDOW_IN_MS = 60 * 1000; // 60 seconds
-const CACHE_KEY_PREFIX = 'search';
+const CACHE_KEY_PREFIX = 'contact';
 
 const limiter = rateLimit({
   interval: REQUEST_TIME_WINDOW_IN_MS, // 10 minutes
   uniqueTokenPerInterval: 500, // Max 500 users per second
 });
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
   const apiURL = process.env.API_URL!;
-  const jobQueryParam = 'subtype=job';
-
-  const searchParams = request.nextUrl.searchParams;
-  const queryString = `${searchParams.toString()}&${jobQueryParam}`;
 
   const ip = retrieveIp(request);
   if (!ip) {
@@ -38,8 +34,13 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const url = `${apiURL}/wp-json/wp/v2/search?${queryString}`;
+    const url = `${apiURL}/wp-json/myplugin/v1/create-contact`;
     const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({
+        ...request.body,
+        secret: process.env.CONTACT_API_SECRET,
+      }),
       cache: isDevEnvironment() ? 'no-cache' : 'force-cache',
     });
     const data = await response.json();

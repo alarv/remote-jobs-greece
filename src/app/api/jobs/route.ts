@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
   const queryString = searchParams.toString();
 
   try {
-    const url = `${apiURL}/jobs?${queryString}`;
+    const url = `${apiURL}/wp-json/wp/v2/jobs?${queryString}`;
     const res = await fetch(url, {
       cache: isDevEnvironment() ? 'no-cache' : 'force-cache',
     });
