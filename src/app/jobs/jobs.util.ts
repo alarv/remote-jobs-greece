@@ -1,6 +1,6 @@
 import { IFilters } from '@/app/components/Filters';
 
-const FILTER_PREFIX = 'filter_';
+const FILTER_PREFIX = 'filter';
 
 type FilterKeys = keyof IFilters;
 type WhiteListedFilterKeys = {
@@ -16,7 +16,7 @@ const FILTER_WHITELISTED_KEYS: WhiteListedFilterKeys = {
 export function prefixFilterKeysWithFilters(filters: object): object {
   const updatedEntries = Object.entries(filters).map(([key, value]) => {
     if (FILTER_WHITELISTED_KEYS[key as FilterKeys]) {
-      return [`${FILTER_PREFIX}${key}`, value];
+      return [`${FILTER_PREFIX}_${key}`, value];
     } else {
       return [key, value];
     }

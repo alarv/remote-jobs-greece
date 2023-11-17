@@ -15,12 +15,12 @@ export default function About() {
     <>
       <main className="mx-auto max-w-5xl py-5 sm:px-6 lg:px-8 ">
         <h1 className="text-4xl font-semibold mb-4">
-          About Remote-jobs-greece.gr
+          About RemoteJobsGreece.gr
         </h1>
 
         <h2 className="text-2xl font-semibold mb-2">Who We Are</h2>
         <p className="mb-4">
-          Remote-Jobs-Greece.gr is the ultimate platform dedicated to helping
+          RemoteJobsGreece.gr is the ultimate platform dedicated to helping
           people residing in Greece to find their dream remote job. In an age
           where work is becoming increasingly location-independent, we believe
           that you should be able to pursue a fulfilling career without
@@ -81,8 +81,8 @@ export default function About() {
         <h2 className="text-2xl font-semibold mb-2">Get in Touch</h2>
         <p className="mb-4">
           Have questions? We&apos;d love to hear from you. Contact us at{' '}
-          <a href="mailto:contact@remote-jobs-greece.gr" className="underline">
-            contact@remote-jobs-greece.gr
+          <a href="mailto:info@remotejobsgreece.gr" className="underline">
+            info@remotejobsgreece.gr
           </a>
           .
         </p>

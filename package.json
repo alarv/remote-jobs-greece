@@ -1,5 +1,5 @@
 {
-  "name": "remote-jobs-greece",
+  "name": "remotejobsgreece.gr",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -17,6 +17,7 @@
     "next": "13.5.4",
     "react": "^18",
     "react-dom": "^18",
+    "react-google-recaptcha": "^3.1.0",
     "styled-jsx": "^5.1.2",
     "uuid": "^9.0.1"
   },
@@ -28,6 +29,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-google-recaptcha": "^2.1.8",
     "@types/uuid": "^9.0.7",
     "@vitejs/plugin-react": "^4.1.1",
     "autoprefixer": "^10",
