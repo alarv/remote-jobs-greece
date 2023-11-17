@@ -117,7 +117,8 @@ export default function ContactPage() {
 
       <p className="mb-4">
         We&apos;d love to hear from you! Whether you&apos;re looking for a job
-        or an employer, feel free to get in touch.
+        or an employer, feel free to get in touch through the following form or
+        send us an email at: info [at] remotejobsgreece [dot] gr
       </p>
 
       <form className="space-y-4" onSubmit={submitForm}>
@@ -177,7 +178,7 @@ export default function ContactPage() {
         <div className="pb-20px">
           <ReCAPTCHA
             size="normal"
-            sitekey={process.env.RECAPTCHA_SITE_KEY!}
+            sitekey="6LcO1xEpAAAAAOZ9DCPxu01VyOKXx7QoyyCd1tiL"
             onChange={onCaptchaChange}
             ref={recaptcha}
           />
