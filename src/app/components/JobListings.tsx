@@ -14,7 +14,7 @@ interface JobListingProps {
 }
 
 export default function JobListings(props: JobListingProps) {
-  const jobs = props.jobs || [];
+  const jobs = props.jobs;
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -41,7 +41,9 @@ export default function JobListings(props: JobListingProps) {
           </div>
         </div>
         <div className="border shadow border-gray-200 rounded-b-lg grid grid-cols-1 divide-y divide-gray-100">
-          {jobs?.map((job) => <JobListing key={job.id} job={job} />)}
+          {jobs &&
+            Array.isArray(jobs) &&
+            jobs.map((job) => <JobListing key={job.id} job={job} />)}
         </div>
         <div>
           <Pagination
