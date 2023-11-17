@@ -14,7 +14,7 @@ interface JobListingProps {
 }
 
 export default function JobListings(props: JobListingProps) {
-  const jobs = props.jobs;
+  const jobs = props.jobs || [];
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
 
