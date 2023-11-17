@@ -64,6 +64,8 @@ export async function POST(request: NextRequest) {
       ...requestBody,
       secret: process.env.CONTACT_API_SECRET,
     };
+
+    console.log(body);
     const response = await fetch(
       `${apiURL}/wp-json/myplugin/v1/create-contact`,
       {
@@ -74,6 +76,10 @@ export async function POST(request: NextRequest) {
         body: JSON.stringify(body),
       },
     );
+    if (!response.ok) {
+      console.error(await response.json());
+      return Response.error();
+    }
     const data = await response.json();
     return Response.json(data, {
       headers: {

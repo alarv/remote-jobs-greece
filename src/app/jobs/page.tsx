@@ -7,7 +7,7 @@ import { Metadata } from 'next';
 import { prefixFilterKeysWithFilters } from '@/app/jobs/jobs.util';
 
 export const metadata: Metadata = {
-  title: 'Remote Jobs in Greece - Find and Apply for Remote Work',
+  title: 'Jobs | Remote Jobs Greece',
   description:
     'Explore a variety of remote job opportunities in Greece with RemoteJobsGreece.gr.',
   openGraph: {
