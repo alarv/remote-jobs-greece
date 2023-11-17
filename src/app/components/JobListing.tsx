@@ -73,10 +73,10 @@ export default function JobListing({ job }: JobProps) {
         </div>
         <div className="col-start-4 text-center	flex flex-col">
           <p className="bg-indigo-100 group-hover:bg-indigo-600 text-indigo-700 rounded-full px-3 py-1 m-2 text-sm text-indigo-500 group-hover:text-indigo-100">
-            {job.acf.employment_type}
+            {job.acf.employment_type.join(',')}
           </p>
           <p className="text-sm text-gray-900 truncate px-1">
-            {job.acf.salary_minimum_range >0 && (
+            {job.acf.salary_minimum_range > 0 && (
               <>
                 {job.acf.salary_minimum_range}€
                 {job.acf.salary_time_frame && `/${job.acf.salary_time_frame}`}
