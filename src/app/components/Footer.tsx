@@ -27,7 +27,7 @@ export default function Footer() {
           </Link>
         </li>
         <li>
-          <Link href="/Contact" className="hover:underline">
+          <Link href="/contact" className="hover:underline">
             Contact
           </Link>
         </li>
