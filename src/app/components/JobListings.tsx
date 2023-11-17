@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import Pagination from './Pagination';
 
 interface JobListingProps {
-  jobs: IJob[];
+  jobs?: IJob[];
   total: number;
   totalPages: number;
   onFiltersChange?: (filters: IFilters) => void;
@@ -41,9 +41,7 @@ export default function JobListings(props: JobListingProps) {
           </div>
         </div>
         <div className="border shadow border-gray-200 rounded-b-lg grid grid-cols-1 divide-y divide-gray-100">
-          {jobs.map((job) => (
-            <JobListing key={job.id} job={job} />
-          ))}
+          {jobs?.map((job) => <JobListing key={job.id} job={job} />)}
         </div>
         <div>
           <Pagination
