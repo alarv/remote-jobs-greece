@@ -24,6 +24,10 @@ export async function GET(request: NextRequest) {
     const res = await fetch(url, {
       cache: isDevEnvironment() ? 'no-cache' : 'force-cache',
     });
+    if (!res.ok) {
+      return Response.error();
+    }
+
     const { total, totalPages } = retrievePagesFromHeaders(res);
     const data = await res.json();
 

@@ -142,7 +142,6 @@ export function Filters(props: FiltersProps) {
     delete updatedFilters[key];
 
     setFilters(updatedFilters);
-    searchParams;
     onFiltersChange(updatedFilters);
   }
 

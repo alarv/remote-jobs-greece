@@ -1,27 +1,32 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Filters, IFilters } from './Filters';
 import JobListing, { IJob } from './JobListing';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Pagination from './Pagination';
-import Search from '@/app/components/Search';
 import { JobsResponse } from '@/app/api/jobs/route';
-import { prefixFilterKeysWithFilters } from '@/app/util/jobs.util';
+import Image from 'next/image';
 import LoadingSkeleton from '@/app/components/LoadingSkeleton';
 
 interface JobListingProps {}
 
-async function getJobs(filters: IFilters = {}): Promise<JobsResponse> {
+async function getJobs(
+  filters: IFilters = {},
+  currentPage: number,
+): Promise<JobsResponse> {
   const params = new URLSearchParams({
     ...filters,
   });
   const queryString = params.toString();
 
   try {
-    const response = await fetch(`/api/jobs?${queryString}`, {
-      cache: 'no-store',
-    });
+    const response = await fetch(
+      `/api/jobs?${queryString}&page=${currentPage}`,
+      {
+        cache: 'no-store',
+      },
+    );
 
     const data = await response.json();
     console.log(data);
@@ -36,9 +41,14 @@ async function getJobs(filters: IFilters = {}): Promise<JobsResponse> {
   }
 }
 
-async function searchJobs(searchTerm: string): Promise<JobsResponse> {
+async function searchJobs(
+  searchTerm: string,
+  currentPage: number,
+): Promise<JobsResponse> {
   try {
-    const response = await fetch(`/api/search?searchTerm=${searchTerm}`);
+    const response = await fetch(
+      `/api/search?searchTerm=${searchTerm}&page=${currentPage}`,
+    );
 
     const data = await response.json();
     console.log(data);
@@ -55,7 +65,10 @@ async function searchJobs(searchTerm: string): Promise<JobsResponse> {
 
 export default function JobListings(props: JobListingProps) {
   const router = useRouter();
+  const pathname = usePathname();
+
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(true);
   const [jobs, setJobs] = useState<IJob[] | undefined>();
   const [totalJobs, setTotalJobs] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -72,16 +85,37 @@ export default function JobListings(props: JobListingProps) {
   }
 
   useEffect(() => {
+    setJobs(undefined);
+    setIsLoading(true);
     if (searchTerm) {
-      searchJobs(searchTerm).then((jobsResponse) =>
-        parseJobsResponse(jobsResponse),
-      );
+      searchJobs(searchTerm, currentPage)
+        .then((jobsResponse) => parseJobsResponse(jobsResponse))
+        .catch(() => setIsError(true));
     } else {
-      getJobs(Object.fromEntries(searchParams.entries()) as IFilters).then(
-        (jobsResponse) => parseJobsResponse(jobsResponse),
-      );
+      getJobs(
+        Object.fromEntries(searchParams.entries()) as IFilters,
+        currentPage,
+      )
+        .then((jobsResponse) => parseJobsResponse(jobsResponse))
+        .catch(() => setIsError(true));
     }
-  }, [searchTerm, searchParams]);
+  }, [searchTerm, searchParams, currentPage]);
+
+  useEffect(() => {
+    if (searchParams.has('page')) {
+      setCurrentPage(parseInt(searchParams.get('page')!));
+    }
+  }, [searchParams]);
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams);
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams],
+  );
 
   function filtersChanged(filters: IFilters) {
     const params = new URLSearchParams({ ...filters });
@@ -89,12 +123,20 @@ export default function JobListings(props: JobListingProps) {
 
     setFilters(filters);
     setSearchTerm(null);
+    setCurrentPage(1);
 
     router.push(`/jobs?${queryString}`);
   }
 
   function searchSubmitted(searchTerm: string) {
     setSearchTerm(searchTerm);
+  }
+
+  function pageChanged(currentPage: number) {
+    setCurrentPage(currentPage);
+    router.push(
+      pathname + '?' + createQueryString('page', currentPage.toString()),
+    );
   }
 
   return (
@@ -118,16 +160,36 @@ export default function JobListings(props: JobListingProps) {
             </div>
           )}
           {jobs && jobs.length === 0 && (
-            <p className="p-10">No jobs were found with your search criteria</p>
+            <>
+              <div className="flex items-center justify-center">
+                <Image
+                  alt="no jobs sad ghost"
+                  src="https://i.imgur.com/uvZdUXX.png"
+                  width={100}
+                  height={100}
+                  className="py-3"
+                />
+              </div>
+              {isError ? (
+                <p className="p-10 text-sm text-center">An error occurred</p>
+              ) : (
+                <p className="p-10 text-sm text-center">
+                  No jobs were found with your search criteria
+                </p>
+              )}
+            </>
           )}
           {jobs && jobs.map((job) => <JobListing key={job.id} job={job} />)}
         </div>
         <div>
-          <Pagination
-            currentPage={currentPage}
-            total={totalJobs}
-            totalPages={totalPages}
-          />
+          {!isLoading && (
+            <Pagination
+              currentPage={currentPage}
+              total={totalJobs}
+              totalPages={totalPages}
+              onPageChanged={pageChanged}
+            />
+          )}
         </div>
       </div>
     </main>
