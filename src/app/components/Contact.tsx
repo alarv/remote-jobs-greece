@@ -9,6 +9,8 @@ import React, {
 } from 'react';
 import { ReCAPTCHA } from 'react-google-recaptcha';
 
+const RECAPTCHA_KEY_ID = '6LeMyxIpAAAAAIgSBtBuI2_MGpbhJKGyw3dfMYTA';
+
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
@@ -178,7 +180,7 @@ export default function Contact() {
         <div className="pb-20px">
           <ReCAPTCHA
             size="normal"
-            sitekey="6LcO1xEpAAAAAOZ9DCPxu01VyOKXx7QoyyCd1tiL"
+            sitekey={RECAPTCHA_KEY_ID}
             onChange={onCaptchaChange}
             ref={recaptcha}
           />
