@@ -4,7 +4,7 @@ import { IJob } from '../components/JobListing';
 import { IFilters } from '../components/Filters';
 import { JobsResponse } from '@/app/api/jobs/route';
 import { Metadata } from 'next';
-import { prefixFilterKeysWithFilters } from '@/app/jobs/jobs.util';
+import { prefixFilterKeysWithFilters } from '@/app/util/jobs.util';
 
 export const metadata: Metadata = {
   title: 'Jobs | Remote Jobs Greece',
