@@ -80,11 +80,8 @@ export default function About() {
 
         <h2 className="text-2xl font-semibold mb-2">Get in Touch</h2>
         <p className="mb-4">
-          Have questions? We&apos;d love to hear from you. Contact us at{' '}
-          <a href="mailto:info@remotejobsgreece.gr" className="underline">
-            info@remotejobsgreece.gr
-          </a>
-          .
+          Have questions? We&apos;d love to hear from you. Contact us at: info
+          [at] remotejobsgreece [dot] gr.
         </p>
       </main>
     </>

@@ -30,7 +30,9 @@ export default function PrivacyPolicy() {
           Privacy Policy, please do not hesitate to contact us.
         </p>
 
-        <h2 className="mb-4">No Collection of Personal Data</h2>
+        <h2 className="text-2xl font-semibold mb-4">
+          No Collection of Personal Data
+        </h2>
 
         <p className="mb-4">
           Remote Jobs Greece is committed to protecting the privacy of our
@@ -55,7 +57,7 @@ export default function PrivacyPolicy() {
           improvement.
         </p>
 
-        <h2 className="mb-4">Third-Party Links</h2>
+        <h2 className="text-2xl font-semibold mb-4">Third-Party Links</h2>
 
         <p className="mb-4">
           Our website may contain links to external sites that are not operated
@@ -64,24 +66,26 @@ export default function PrivacyPolicy() {
           for their respective privacy policies.
         </p>
 
-        <h2 className="mb-4">Your Consent</h2>
+        <h2 className="text-2xl font-semibold mb-4">Your Consent</h2>
 
         <p className="mb-4">
           By using our website, you hereby consent to our Privacy Policy and
           agree to its terms.
         </p>
 
-        <h2 className="mb-4">Changes to Our Privacy Policy</h2>
+        <h2 className="text-2xl font-semibold mb-4">
+          Changes to Our Privacy Policy
+        </h2>
 
         <p className="mb-4">
           We reserve the right to make changes to this privacy policy at any
           time. We will notify you of any changes by posting the new privacy
           policy on this page.
         </p>
-        <h2 className="mb-4">Contact Us</h2>
+        <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
         <p className="mb-4">
           If you have any questions about our privacy practices or this policy,
-          please contact us at [Your Contact Information].
+          please contact us at info [at] remotejobsgreece [dot] gr.
         </p>
       </main>
     </>
