@@ -5,7 +5,7 @@ import { Inter } from 'next/font/google';
 import Header from '@/app/components/Header';
 import Footer from '@/app/components/Footer';
 import CookiesConsent from '@/app/components/CookiesConsent';
-import { GoogleAnalytics } from 'nextjs-google-analytics';
+import GoogleAnalytics from '@/app/components/GoogleAnalytics';
 
 const interFont = Inter({
   subsets: ['latin'],
@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={interFont.className}>
       <body>
-        <GoogleAnalytics trackPageViews />
+        <GoogleAnalytics ga_id={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS!} />
         <CookiesConsent />
 
         <div id="main-container">
