@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (err) {
-    console.error('route jobs could not be retrieved');
+    console.error('route search could not be retrieved', err);
     return Response.json([]);
   }
 }

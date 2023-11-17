@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     };
     return Response.json(response);
   } catch (err) {
-    console.error('route jobs could not be retrieved');
+    console.error('route jobs could not be retrieved', err);
     throw err;
   }
 }

@@ -33,16 +33,47 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const requestBody = await request.json();
+
+  // Google reCaptcha check
   try {
-    const url = `${apiURL}/wp-json/myplugin/v1/create-contact`;
-    const response = await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify({
-        ...request.body,
-        secret: process.env.CONTACT_API_SECRET,
-      }),
-      cache: isDevEnvironment() ? 'no-cache' : 'force-cache',
-    });
+    const response = await fetch(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${requestBody.captchaToken}`,
+      { method: 'POST' },
+    );
+
+    if (response.status !== 200) {
+      return NextResponse.json(
+        { message: 'reCAPTCHA verification failed.' },
+        {
+          status: 400,
+        },
+      );
+    }
+  } catch (e) {
+    return NextResponse.json(
+      { message: 'reCAPTCHA verification failed.' },
+      {
+        status: 400,
+      },
+    );
+  }
+
+  try {
+    const body = {
+      ...requestBody,
+      secret: process.env.CONTACT_API_SECRET,
+    };
+    const response = await fetch(
+      `${apiURL}/wp-json/myplugin/v1/create-contact`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      },
+    );
     const data = await response.json();
     return Response.json(data, {
       headers: {
@@ -51,7 +82,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (err) {
-    console.error('route jobs could not be retrieved');
-    return Response.json([]);
+    console.error('route contacts could not be retrieved', err);
+    return Response.error();
   }
 }
