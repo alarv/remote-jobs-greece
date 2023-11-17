@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isDevEnvironment } from '@/app/util/env.util';
 import rateLimit, { retrieveIp } from '@/app/util/rate-limit.util';
+import { retrievePagesFromHeaders } from '@/app/util/res.util';
 
 const REQUEST_RATE_LIMIT = 10;
 const REQUEST_TIME_WINDOW_IN_MS = 60 * 1000; // 60 seconds
@@ -11,16 +12,17 @@ const limiter = rateLimit({
   uniqueTokenPerInterval: 500, // Max 500 users per second
 });
 
-export async function GET(request: NextRequest) {
+export async function GET(req: NextRequest) {
   const apiURL = process.env.API_URL!;
   const jobQueryParam = 'subtype=job';
 
-  const searchParams = request.nextUrl.searchParams;
-  const queryString = `${searchParams.toString()}&${jobQueryParam}`;
+  const searchTerm = req.nextUrl.searchParams.get('searchTerm');
 
-  const ip = retrieveIp(request);
+  const queryString = `search=${searchTerm}&${jobQueryParam}`;
+
+  const ip = retrieveIp(req);
   if (!ip) {
-    console.warn('request ip could not be retrieved');
+    console.warn('req ip could not be retrieved');
   }
 
   const { isRateLimited, limit, limitRemaining } = limiter.check(
@@ -42,13 +44,22 @@ export async function GET(request: NextRequest) {
     const response = await fetch(url, {
       cache: isDevEnvironment() ? 'no-cache' : 'force-cache',
     });
+    const { total, totalPages } = retrievePagesFromHeaders(response);
+
     const data = await response.json();
-    return Response.json(data, {
-      headers: {
-        'X-RateLimit-Limit': limit,
-        'X-RateLimit-Remaining': limitRemaining,
+    return Response.json(
+      {
+        total,
+        totalPages,
+        data,
       },
-    });
+      {
+        headers: {
+          'X-RateLimit-Limit': limit,
+          'X-RateLimit-Remaining': limitRemaining,
+        },
+      },
+    );
   } catch (err) {
     console.error('route search could not be retrieved', err);
     return Response.json([]);

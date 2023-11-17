@@ -1,6 +1,8 @@
 import { NextRequest } from 'next/server';
 import { IJob } from '@/app/components/JobListing';
 import { isDevEnvironment } from '@/app/util/env.util';
+import { retrievePagesFromHeaders } from '@/app/util/res.util';
+import { prefixFilterKeysWithFilters } from '@/app/util/jobs.util';
 
 export interface JobsResponse {
   total: number;
@@ -11,20 +13,23 @@ export interface JobsResponse {
 export async function GET(request: NextRequest) {
   const apiURL = process.env.API_URL!;
 
-  const searchParams = request.nextUrl.searchParams;
-  const queryString = searchParams.toString();
+  const prefixedFilters = prefixFilterKeysWithFilters(
+    Object.fromEntries(request.nextUrl.searchParams),
+  );
+
+  const queryString = new URLSearchParams({ ...prefixedFilters });
 
   try {
     const url = `${apiURL}/wp-json/wp/v2/jobs?${queryString}`;
     const res = await fetch(url, {
       cache: isDevEnvironment() ? 'no-cache' : 'force-cache',
     });
-    const { headers } = res;
+    const { total, totalPages } = retrievePagesFromHeaders(res);
     const data = await res.json();
 
     const response: JobsResponse = {
-      total: parseInt(headers.get('x-wp-total')!),
-      totalPages: parseInt(headers.get('x-wp-totalpages')!),
+      total,
+      totalPages,
       data,
     };
     return Response.json(response);

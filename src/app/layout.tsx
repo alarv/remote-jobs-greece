@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={interFont.className}>
       <body>
-        <GoogleAnalytics ga_id={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS!} />
+        <GoogleAnalytics ga_id={process.env.GA_MEASUREMENT_ID!} />
         <CookiesConsent />
 
         <div id="main-container">
