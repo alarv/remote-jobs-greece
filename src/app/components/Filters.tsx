@@ -24,11 +24,11 @@ interface FiltersProps {
 }
 
 const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
-  { name: 'Price: Low to High', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false },
+  { name: 'Date Posted', href: '#', current: true },
+  { name: 'Job Title', href: '#', current: false },
+  { name: 'Company Name', href: '#', current: false },
+  { name: 'Salary Range: Low to High', href: '#', current: false },
+  { name: 'Salary Range: High to Low', href: '#', current: false },
 ];
 
 type FilterContentOption = { checked: boolean; label: string; value: string };
@@ -327,13 +327,13 @@ export function Filters(props: FiltersProps) {
                 </Transition>
               </Menu>
 
-              <button
-                type="button"
-                className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
-              >
-                <span className="sr-only">View grid</span>
-                <Squares2X2Icon className="h-5 w-5" aria-hidden="true" />
-              </button>
+              {/*<button*/}
+              {/*  type="button"*/}
+              {/*  className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"*/}
+              {/*>*/}
+              {/*  <span className="sr-only">View grid</span>*/}
+              {/*  <Squares2X2Icon className="h-5 w-5" aria-hidden="true" />*/}
+              {/*</button>*/}
               <button
                 type="button"
                 className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
