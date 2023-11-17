@@ -35,9 +35,17 @@ body:after {
   transform: rotate(45deg);
 }
 
-body > main {
-  margin-bottom: 70px;
+
+#main-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* This makes sure that your container is at least as tall as the viewport */
 }
+
+#content {
+  flex: 1; /* This will make the content expand to fill available space, pushing the footer down */
+}
+
 
 /* Job page wordpress */
 
