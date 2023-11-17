@@ -65,7 +65,6 @@ export async function POST(request: NextRequest) {
       secret: process.env.CONTACT_API_SECRET,
     };
 
-    console.log(body);
     const response = await fetch(
       `${apiURL}/wp-json/myplugin/v1/create-contact`,
       {
