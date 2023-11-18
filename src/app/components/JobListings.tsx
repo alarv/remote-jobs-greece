@@ -151,6 +151,17 @@ export default function JobListings(props: JobListingProps) {
             </h5>
             {/*<Search onSearchSubmitted={searchSubmitted} />*/}
           </div>
+          <div className="flex items-center justify-between py-2">
+            <p className="text-xs leading-none text-gray-400">
+              Please Note: The job positions currently displayed on our website
+              are for demonstration purposes only and do not represent actual
+              vacancies. They are intended to showcase the functionality of
+              Remote Jobs Greece and provide a preview of how real job listings
+              will appear once we start hosting live data. Stay tuned for
+              updates as we begin to feature actual remote job opportunities!
+            </p>
+            {/*<Search onSearchSubmitted={searchSubmitted} />*/}
+          </div>
         </div>
         <div className="border shadow border-gray-200 rounded-b-lg grid grid-cols-1 divide-y divide-gray-100">
           {isLoading && (
