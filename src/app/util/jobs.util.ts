@@ -11,6 +11,7 @@ const FILTER_WHITELISTED_KEYS: WhiteListedFilterKeys = {
   company_name: true,
   employment_type: true,
   job_field: true,
+  experience: true,
 };
 
 export function prefixFilterKeysWithFilters(filters: object): object {

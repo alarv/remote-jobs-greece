@@ -15,6 +15,7 @@ export interface IFilters {
   company_name?: string;
   employment_type?: string;
   job_field?: string;
+  experience?: string;
 }
 
 interface FiltersProps {
@@ -95,11 +96,25 @@ const DEFAULT_FILTERS_CONTENT: FilterContent[] = [
     id: 'employment_type',
     name: 'Employment Type',
     options: [
-      { value: 'full-time', label: 'Full-time', checked: false },
-      { value: 'part-time', label: 'Part-time', checked: false },
+      { value: 'full_time', label: 'Full-time', checked: false },
+      { value: 'part_time', label: 'Part-time', checked: false },
       { value: 'contract', label: 'Contract', checked: false },
       { value: 'internship', label: 'Internship', checked: false },
       { value: 'temporary', label: 'Temporary', checked: false },
+    ],
+  },
+  {
+    id: 'experience',
+    name: 'Experience Level',
+    options: [
+      { value: 'entry_level', label: 'Entry-Level', checked: false },
+      { value: 'junior', label: 'Junior', checked: false },
+      { value: 'mid_level', label: 'Mid-Level', checked: false },
+      { value: 'senior', label: 'Senior', checked: false },
+      { value: 'lead_principal', label: 'Lead/Principal', checked: false },
+      { value: 'management', label: 'Management', checked: false },
+      { value: 'executive', label: 'Executive', checked: false },
+      { value: 'internship', label: 'Internship', checked: false },
     ],
   },
 ];
