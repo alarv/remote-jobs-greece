@@ -1,5 +1,5 @@
 'use client';
-import { Fragment, useEffect, useState } from 'react';
+import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import {
@@ -7,9 +7,7 @@ import {
   FunnelIcon,
   MinusIcon,
   PlusIcon,
-  Squares2X2Icon,
 } from '@heroicons/react/20/solid';
-import React from 'react';
 import { input } from '@material-tailwind/react';
 import { useSearchParams } from 'next/navigation';
 
@@ -149,7 +147,7 @@ export function Filters(props: FiltersProps) {
   function handleChange(
     key: keyof IFilters,
     value: string,
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: ChangeEvent<HTMLInputElement>,
   ) {
     const updatedFilters: IFilters = { ...filters };
     if (event.target.checked) {
@@ -293,38 +291,28 @@ export function Filters(props: FiltersProps) {
                   </Menu.Button>
                 </div>
 
-                <Transition
-                  as={Fragment}
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
-                >
-                  <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <div className="py-1">
-                      {sortOptions.map((option) => (
-                        <Menu.Item key={option.name}>
-                          {({ active }) => (
-                            <a
-                              href={option.href}
-                              className={classNames(
-                                option.current
-                                  ? 'font-medium text-gray-900'
-                                  : 'text-gray-500',
-                                active ? 'bg-gray-100' : '',
-                                'block px-4 py-2 text-sm',
-                              )}
-                            >
-                              {option.name}
-                            </a>
-                          )}
-                        </Menu.Item>
-                      ))}
-                    </div>
-                  </Menu.Items>
-                </Transition>
+                <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="py-1">
+                    {sortOptions.map((option) => (
+                      <Menu.Item key={option.name}>
+                        {({ active }) => (
+                          <a
+                            href={option.href}
+                            className={classNames(
+                              option.current
+                                ? 'font-medium text-gray-900'
+                                : 'text-gray-500',
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm',
+                            )}
+                          >
+                            {option.name}
+                          </a>
+                        )}
+                      </Menu.Item>
+                    ))}
+                  </div>
+                </Menu.Items>
               </Menu>
 
               {/*<button*/}
@@ -383,56 +371,65 @@ export function Filters(props: FiltersProps) {
                             </span>
                           </Disclosure.Button>
                         </h3>
-                        <Disclosure.Panel className="pt-3">
-                          <div className="space-y-4">
-                            <div>
-                              <span
-                                className="font-medium text-indigo-700 text-sm cursor-pointer hover:underline"
-                                onClick={() =>
-                                  clearFilters(section.id as keyof IFilters)
-                                }
-                              >
-                                Clear
-                              </span>
-                            </div>
-                            {section.options.map((option, optionIdx) => (
-                              <div
-                                key={option.value}
-                                className="flex items-center"
-                              >
-                                <input
-                                  id={`filter-${section.id}-${optionIdx}`}
-                                  name={`${section.id}[]`}
-                                  defaultValue={option.value}
-                                  type="radio"
-                                  checked={option.checked}
-                                  className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 focus:ring-indigo-500 focus:ring-2"
-                                  onChange={(event) =>
-                                    handleChange(
-                                      section.id as keyof IFilters,
-                                      option.value,
-                                      event,
-                                    )
+                        <Transition
+                          as={Fragment}
+                          show={open}
+                          enter="transition duration-500 ease-out"
+                          enterFrom="transform scale-95 opacity-0"
+                          enterTo="transform scale-100 opacity-100"
+                          leave="transition duration-75 ease-out"
+                          leaveFrom="transform scale-100 opacity-100"
+                          leaveTo="transform scale-95 opacity-0"
+                        >
+                          <Disclosure.Panel className="pt-3 overflow-hidden">
+                            <div className="space-y-4">
+                              <div>
+                                <span
+                                  className="font-medium text-indigo-700 text-sm cursor-pointer hover:underline"
+                                  onClick={() =>
+                                    clearFilters(section.id as keyof IFilters)
                                   }
-                                />
-                                <label
-                                  htmlFor={`filter-${section.id}-${optionIdx}`}
-                                  className="ml-3 text-sm text-gray-600"
                                 >
-                                  {option.label}
-                                </label>
+                                  Clear
+                                </span>
                               </div>
-                            ))}
-                          </div>
-                        </Disclosure.Panel>
+
+                              {section.options.map((option, optionIdx) => (
+                                <div
+                                  key={option.value}
+                                  className="flex items-center"
+                                >
+                                  <input
+                                    id={`filter-${section.id}-${optionIdx}`}
+                                    name={`${section.id}[]`}
+                                    defaultValue={option.value}
+                                    type="radio"
+                                    checked={option.checked}
+                                    className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 focus:ring-indigo-500 focus:ring-2"
+                                    onChange={(event) =>
+                                      handleChange(
+                                        section.id as keyof IFilters,
+                                        option.value,
+                                        event,
+                                      )
+                                    }
+                                  />
+                                  <label
+                                    htmlFor={`filter-${section.id}-${optionIdx}`}
+                                    className="ml-3 text-sm text-gray-600"
+                                  >
+                                    {option.label}
+                                  </label>
+                                </div>
+                              ))}
+                            </div>
+                          </Disclosure.Panel>
+                        </Transition>
                       </>
                     )}
                   </Disclosure>
                 ))}
               </form>
-
-              {/* Product grid */}
-              <div className="lg:col-span-3">{/* Your content */}</div>
             </div>
           </section>
         </main>
