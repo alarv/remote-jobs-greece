@@ -372,7 +372,6 @@ export function Filters(props: FiltersProps) {
                           </Disclosure.Button>
                         </h3>
                         <Transition
-                          as={Fragment}
                           show={open}
                           enter="transition duration-500 ease-out"
                           enterFrom="transform scale-95 opacity-0"
@@ -381,7 +380,7 @@ export function Filters(props: FiltersProps) {
                           leaveFrom="transform scale-100 opacity-100"
                           leaveTo="transform scale-95 opacity-0"
                         >
-                          <Disclosure.Panel className="pt-3 overflow-hidden">
+                          <Disclosure.Panel className="pt-3">
                             <div className="space-y-4">
                               <div>
                                 <span

@@ -84,6 +84,7 @@ export default function JobListings(props: JobListingProps) {
   }
 
   useEffect(() => {
+    setIsError(false);
     setJobs(undefined);
     setIsLoading(true);
     if (searchTerm) {
