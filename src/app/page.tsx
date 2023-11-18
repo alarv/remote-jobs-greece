@@ -20,7 +20,7 @@ export default function LandingPage() {
       }}
     >
       <div className="relative isolate px-6 pt-14 lg:px-8">
-        <div className="mx-auto max-w-2xl py-16 sm:py-48 lg:py-36">
+        <div className="mx-auto max-w-2xl pt-16 sm:pt-48 lg:pt-36">
           <div className="hidden sm:mb-8 sm:flex sm:justify-center"></div>
           <div className="text-center">
             <h1 className="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl">

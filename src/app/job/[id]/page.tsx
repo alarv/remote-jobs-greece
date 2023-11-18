@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Metadata, ResolvingMetadata } from 'next';
 import { isDevEnvironment } from '@/app/util/env.util';
+import { formatNumber } from '@/app/util/number.util';
 
 async function getJob(id: string): Promise<IJob | undefined> {
   const apiURL = process.env.API_URL!;
@@ -146,25 +147,24 @@ export default async function Page({ params }: Props) {
                 {job.acf.salary_minimum_range > 0 &&
                   job.acf.salary_maximum_range > 0 && (
                     <p className="font-semibold mt-4">
-                      Salary Range:{' '}
-                      {job.acf.salary_minimum_range.toLocaleString('en')}-
-                      {job.acf.salary_maximum_range.toLocaleString('en')}€
+                      Salary Range: {formatNumber(job.acf.salary_minimum_range)}
+                      -{formatNumber(job.acf.salary_maximum_range)}€
                     </p>
                   )}
 
                 {job.acf.salary_minimum_range === null &&
                   job.acf.salary_maximum_range > 0 && (
                     <p className="font-semibold mt-4">
-                      Salary Range:{' '}
-                      {job.acf.salary_maximum_range.toLocaleString('en')}€
+                      Salary Range: {formatNumber(job.acf.salary_maximum_range)}
+                      €
                     </p>
                   )}
 
                 {job.acf.salary_minimum_range > 0 &&
                   job.acf.salary_maximum_range === null && (
                     <p className="font-semibold mt-4">
-                      Salary Range:{' '}
-                      {job.acf.salary_minimum_range.toLocaleString('en')}€
+                      Salary Range: {formatNumber(job.acf.salary_minimum_range)}
+                      €
                     </p>
                   )}
 

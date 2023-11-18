@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import { formatNumber } from '@/app/util/number.util';
 
 export interface Tag {
   name: string;
@@ -78,7 +79,7 @@ export default function JobListing({ job }: JobProps) {
           <p className="text-sm text-gray-900 truncate px-1">
             {job.acf.salary_minimum_range > 0 && (
               <>
-                {job.acf.salary_minimum_range}€
+                {formatNumber(job.acf.salary_minimum_range)}€
                 {job.acf.salary_time_frame && `/${job.acf.salary_time_frame}`}
               </>
             )}
