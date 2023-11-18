@@ -96,7 +96,7 @@ export default function Pagination(props: PaginationProps) {
                 <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
               </a>
             )}
-            {Array.from(
+            {props.totalPages > 1 &&
               Array.from(Array(props.totalPages), (e, pageNumber) => {
                 return (
                   <a
@@ -112,8 +112,7 @@ export default function Pagination(props: PaginationProps) {
                     {pageNumber + 1}
                   </a>
                 );
-              }),
-            )}
+              })}
             {isNextPageAllowed() && (
               <a
                 onClick={nextClicked}
