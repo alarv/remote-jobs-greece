@@ -37,6 +37,8 @@ interface JobProps {
 }
 
 export default function JobListing({ job }: JobProps) {
+  const markupTitle = { __html: job.title.rendered };
+
   return (
     <a href={`/job/${job.id}`}>
       <div className="w-full grid grid-cols-3 gap-0 mb-1 px-4 py-4 sm:px-6 bg-white rounded-b-lg border-hidden group hover:bg-indigo-50 hover:shadow-lg hover:border-indigo-500">
@@ -51,9 +53,10 @@ export default function JobListing({ job }: JobProps) {
         )}
 
         <div className="col-start-1 col-span-3">
-          <p className="col-start-1 col-span-3 font-semibold leading-none text-indigo-700 group-hover:text-indigo-500">
-            {job.title.rendered}
-          </p>
+          <p
+            className="col-start-1 col-span-3 font-semibold leading-none text-indigo-700 group-hover:text-indigo-500"
+            dangerouslySetInnerHTML={markupTitle}
+          ></p>
           <p className="text-sm text-gray-500 truncate py-1">
             {job.acf.company_name}{' '}
           </p>
