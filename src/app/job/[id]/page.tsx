@@ -51,7 +51,8 @@ export default async function Page({ params }: Props) {
     notFound();
   }
 
-  const markup = { __html: job.content.rendered };
+  const markupTitle = { __html: job.title.rendered };
+  const markupContent = { __html: job.content.rendered };
   const languagesList = job.acf.languages.join(', ');
 
   return (
@@ -60,17 +61,32 @@ export default async function Page({ params }: Props) {
         <div className="mx-auto max-w-5xl px-2 sm:px-6 lg:px-8">
           <div className="grid grid-cols-6 py-4 pl-2 sm:pl-0">
             {/* Title */}
-            <div className="text-3xl text-white font-semibold col-span-4 py-3">
-              {job.title.rendered}
-            </div>
+            <div
+              className="text-3xl text-white font-semibold col-span-4 py-3"
+              dangerouslySetInnerHTML={markupTitle}
+            ></div>
             {/* Apply */}
-            <div className="col-end-7 col-span-1 flex md:flex md:flex-grow flex-row justify-end space-x-1 py-3">
+            <div className="col-end-7 col-span-1 flex md:flex md:flex-grow flex-row justify-end space-x-1 py-3 items-center">
               <Link
                 href={job.acf.job_url}
                 target="_blank"
-                className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="w-30 h-10 inline-flex items-center rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
-                Apply
+                Apply{' '}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="ml-2 w-4 h-4 "
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
+                  />
+                </svg>
               </Link>
             </div>
             {/* employment type */}
@@ -124,7 +140,7 @@ export default async function Page({ params }: Props) {
             <div className="col-span-3">
               <div
                 className="pl-2 sm:pl-0 mt-4 job__description"
-                dangerouslySetInnerHTML={markup}
+                dangerouslySetInnerHTML={markupContent}
               ></div>
             </div>
             <div className="col-span-2 border border-slate-200 border-t-0 border-l-1 border-r-1 border-b-0">
