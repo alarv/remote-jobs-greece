@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function About() {
   return (
     <>
-      <main className="mx-auto max-w-5xl py-5 sm:px-6 lg:px-8 ">
+      <main className="mx-auto max-w-5xl p-3 sm:px-6 lg:px-8 break-words">
         <h1 className="text-4xl font-semibold mb-4">
           About RemoteJobsGreece.gr
         </h1>
