@@ -12,8 +12,8 @@ import LoadingSkeleton from '@/app/components/LoadingSkeleton';
 interface JobListingProps {}
 
 async function getJobs(
-  filters: IFilters = {},
   currentPage: number,
+  filters: IFilters = {},
 ): Promise<JobsResponse> {
   const params = new URLSearchParams({
     ...filters,
@@ -28,8 +28,7 @@ async function getJobs(
       },
     );
 
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (err) {
     console.error('page jobs could not be retrieved');
     return {
@@ -65,6 +64,8 @@ async function searchJobs(
 export default function JobListings(props: JobListingProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const initialPageState = getInitialPageState();
 
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(true);
@@ -72,9 +73,18 @@ export default function JobListings(props: JobListingProps) {
   const [totalJobs, setTotalJobs] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
-  const [filters, setFilters] = useState<IFilters>({});
-  const [currentPage, setCurrentPage] = useState(1);
-  const searchParams = useSearchParams();
+  const [filters, setFilters] = useState<IFilters>(
+    Object.fromEntries(searchParams.entries()),
+  );
+  const [currentPage, setCurrentPage] = useState(initialPageState);
+
+  function getInitialPageState() {
+    if (searchParams.has('page')) {
+      return parseInt(searchParams.get('page')!);
+    }
+
+    return 1;
+  }
 
   function parseJobsResponse(jobsResponse: JobsResponse) {
     setJobs(jobsResponse.data);
@@ -92,20 +102,11 @@ export default function JobListings(props: JobListingProps) {
         .then((jobsResponse) => parseJobsResponse(jobsResponse))
         .catch(() => setIsError(true));
     } else {
-      getJobs(
-        Object.fromEntries(searchParams.entries()) as IFilters,
-        currentPage,
-      )
+      getJobs(currentPage, filters)
         .then((jobsResponse) => parseJobsResponse(jobsResponse))
         .catch(() => setIsError(true));
     }
-  }, [searchTerm, searchParams, currentPage]);
-
-  useEffect(() => {
-    if (searchParams.has('page')) {
-      setCurrentPage(parseInt(searchParams.get('page')!));
-    }
-  }, [searchParams]);
+  }, [searchTerm, searchParams, currentPage, filters]);
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
