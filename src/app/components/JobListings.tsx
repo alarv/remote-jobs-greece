@@ -24,7 +24,7 @@ async function getJobs(
     const response = await fetch(
       `/api/jobs?${queryString}&page=${currentPage}`,
       {
-        cache: 'no-store',
+        cache: 'no-cache',
       },
     );
 

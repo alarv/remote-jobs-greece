@@ -6,7 +6,10 @@ const nextConfig = {
     CONTACT_API_SECRET: process.env.CONTACT_API_SECRET,
     RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY,
     GA_MEASUREMENT_ID: process.env.GA_MEASUREMENT_ID,
-    NEXT_PUBLIC_RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
+    ZOHO_CLIENT_ID: process.env.ZOHO_CLIENT_ID,
+    ZOHO_CLIENT_SECRET: process.env.ZOHO_CLIENT_SECRET,
+    ZOHO_REFRESH_TOKEN: process.env.ZOHO_REFRESH_TOKEN,
+    ZOHO_ACCOUNT_ID: process.env.ZOHO_ACCOUNT_ID,
   },
   images: {
     remotePatterns: [

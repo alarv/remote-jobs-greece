@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isDevEnvironment } from '@/app/util/env.util';
 import rateLimit, { retrieveIp } from '@/app/util/rate-limit.util';
+import { getToken, sendEmail } from '@/app/api/contact/zoho.api';
 
 const REQUEST_RATE_LIMIT = 10;
 const REQUEST_TIME_WINDOW_IN_MS = 60 * 1000; // 60 seconds
@@ -60,26 +60,19 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const body = {
-      ...requestBody,
-      secret: process.env.CONTACT_API_SECRET,
-    };
+    const authToken = await getToken();
 
-    const response = await fetch(
-      `${apiURL}/wp-json/myplugin/v1/create-contact`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      },
-    );
-    if (!response.ok) {
-      console.error(await response.json());
-      return Response.error();
-    }
-    const data = await response.json();
+    const data = await sendEmail({
+      authToken,
+      fromAddress: 'info@remotejobsgreece.gr',
+      toAddress: 'alarvfm@gmail.com',
+      subject: 'Contact form',
+      content: `Contact name: ${requestBody.name}. \n
+      Contact email: ${requestBody.email} \n\n\n
+      
+      ${requestBody.message}`,
+    });
+
     return Response.json(data, {
       headers: {
         'X-RateLimit-Limit': limit,
@@ -87,7 +80,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (err) {
-    console.error('route contacts could not be retrieved', err);
+    console.error(err);
     return Response.error();
   }
 }
