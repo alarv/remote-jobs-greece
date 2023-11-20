@@ -444,7 +444,7 @@ export default function CreateJob() {
             Company Email
           </label>
           <input
-            type="text"
+            type="email"
             name="fields.company_email"
             placeholder="Company Email"
             value={formData.fields.company_email}
