@@ -76,6 +76,15 @@ export const employmentTypeCatalog: CatalogValues = {
   ],
 };
 
+export const remoteWorkTypeCatalog: CatalogValues = {
+  id: 'remote_work_type',
+  name: 'Remote Work Type',
+  options: [
+    { value: 'remote', label: 'Remote', checked: false },
+    { value: 'hybrid', label: 'Hybrid', checked: false },
+  ],
+};
+
 export const experienceCatalog: CatalogValues = {
   id: 'experience',
   name: 'Experience Level',

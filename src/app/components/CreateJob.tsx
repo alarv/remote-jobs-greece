@@ -16,6 +16,7 @@ import {
   employmentTypeCatalog,
   experienceCatalog,
   jobFieldCatalog,
+  remoteWorkTypeCatalog,
 } from '@/app/model/api.model';
 import { serialize } from 'object-to-formdata';
 
@@ -26,6 +27,7 @@ interface CreateJobFields {
   employment_type: string[];
   job_field: string;
   experience: string[];
+  remote_work_types: string[];
   // languages: string[];
   // working_conditions: {
   //   rendered: string;
@@ -78,7 +80,7 @@ function generateFormData(data: CreateJobForm) {
 }
 
 export default function CreateJob() {
-  // initialize ReactQuill
+  // initialize ReactQuill dynamically otherwise it causes an import issue
   const ReactQuill = useMemo(
     () => dynamic(() => import('react-quill'), { ssr: false }),
     [],
@@ -93,6 +95,7 @@ export default function CreateJob() {
       employment_type: [],
       job_field: '',
       experience: [],
+      remote_work_types: [],
       job_url: '',
     },
     captchaToken: null,
@@ -100,6 +103,7 @@ export default function CreateJob() {
 
   const [formData, setFormData] = useState({ ...EMPTY_FORM });
   const [employmentTypes, setEmploymentTypes] = useState<string[]>([]);
+  const [remoteWorkTypes, setRemoteWorkTypes] = useState<string[]>([]);
   const [experiences, setExperiences] = useState<string[]>([]);
   const [jobField, setJobField] = useState<string>('');
 
@@ -107,6 +111,7 @@ export default function CreateJob() {
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isEmploymentTypeValid, setIsEmploymentTypeValid] = useState(true);
+  const [isRemoteWorkTypeValid, setIsRemoteWorkTypeValid] = useState(true);
   const [isExperienceValid, setIsExperienceValid] = useState(true);
 
   // Create a ref for the reCAPTCHA widget
@@ -118,6 +123,12 @@ export default function CreateJob() {
   function validateEmploymentType() {
     const isValid = formData.fields.employment_type.length > 0;
     setIsEmploymentTypeValid(isValid);
+    return isValid;
+  }
+
+  function validateRemoteWorkType() {
+    const isValid = formData.fields.remote_work_types.length > 0;
+    setIsRemoteWorkTypeValid(isValid);
     return isValid;
   }
 
@@ -143,7 +154,13 @@ export default function CreateJob() {
     setIsLoading(true);
     setIsError(false);
 
-    const isFormValid = validateEmploymentType() && validateExperience(); // add other validations if needed
+    const isEmploymentTypeValid = validateEmploymentType();
+    const isExperienceValid = validateExperience();
+    const isRemoteWorkTypeValid = validateRemoteWorkType();
+
+    const isFormValid =
+      isExperienceValid && isEmploymentTypeValid && isRemoteWorkTypeValid;
+
     if (!isFormValid) {
       setIsLoading(false);
       return;
@@ -151,6 +168,7 @@ export default function CreateJob() {
 
     formData.fields['employment_type'] = employmentTypes;
     formData.fields['experience'] = experiences;
+    formData.fields['remote_work_types'] = remoteWorkTypes;
     formData.fields['job_field'] = jobField;
 
     const body = serialize(formData);
@@ -158,7 +176,7 @@ export default function CreateJob() {
     try {
       const response = await fetch('/api/jobs', {
         method: 'POST',
-        body: serialize(formData),
+        body,
       });
 
       if (response.status === 200) {
@@ -227,6 +245,16 @@ export default function CreateJob() {
     setFormData((prevFormData) => ({ ...prevFormData, content: value }));
   };
 
+  const handleRemoteWorkTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const item = e.target.value;
+    const isChecked = e.target.checked;
+
+    if (isChecked) {
+      setRemoteWorkTypes([...remoteWorkTypes, item]);
+    } else {
+      setRemoteWorkTypes(remoteWorkTypes.filter((el) => el !== item));
+    }
+  };
   const handleExperienceChange = (e: ChangeEvent<HTMLInputElement>) => {
     const item = e.target.value;
     const isChecked = e.target.checked;
@@ -276,6 +304,16 @@ export default function CreateJob() {
       },
     }));
   }, [employmentTypes]);
+
+  useEffect(() => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      fields: {
+        ...prevFormData.fields,
+        remote_work_types: remoteWorkTypes,
+      },
+    }));
+  }, [remoteWorkTypes]);
 
   useEffect(() => {
     setFormData((prevFormData) => ({
@@ -423,6 +461,7 @@ export default function CreateJob() {
           </label>
           <input
             type="file"
+            accept="image/png, image/jpeg"
             name="company_logo"
             ref={companyLogoFileRef}
             onChange={handleFileChange}
@@ -437,13 +476,33 @@ export default function CreateJob() {
           </p>
         </div>
 
-        <div className="pb-20px">
-          <ReCAPTCHA
-            size="normal"
-            sitekey={RECAPTCHA_KEY_ID}
-            onChange={onCaptchaChange}
-            ref={recaptcha}
-          />
+        <div>
+          <span className="block text-gray-600">Remote Work Type</span>
+          <div className="flex items-center gap-4 mt-2 flex-wrap">
+            {remoteWorkTypeCatalog.options.map((field) => (
+              <label key={field.value} className="flex items-center">
+                <input
+                  type="checkbox"
+                  name="remote_work_type"
+                  value={field.value}
+                  checked={formData.fields.remote_work_types.includes(
+                    field.value,
+                  )}
+                  onChange={handleRemoteWorkTypeChange}
+                  className="rounded border-gray-300 text-indigo-600 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+                <span className="ml-2 text-sm text-gray-600">
+                  {field.label}
+                </span>
+              </label>
+            ))}
+          </div>
+
+          {!isRemoteWorkTypeValid && (
+            <p className="mt-1 text-sm text-red-500">
+              Please select at least one remote work type.
+            </p>
+          )}
         </div>
 
         <div>
@@ -458,7 +517,7 @@ export default function CreateJob() {
                   checked={formData.fields.employment_type.includes(
                     field.value,
                   )}
-                  onChange={handleEmploymentTypeChange} // You'll need to implement this function
+                  onChange={handleEmploymentTypeChange}
                   className="rounded border-gray-300 text-indigo-600 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 />
                 <span className="ml-2 text-sm text-gray-600">
@@ -484,7 +543,7 @@ export default function CreateJob() {
                   name="experience"
                   value={field.value}
                   checked={formData.fields.experience.includes(field.value)}
-                  onChange={handleExperienceChange} // You'll need to implement this function
+                  onChange={handleExperienceChange}
                   className="rounded border-gray-300 text-indigo-600 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 />
                 <span className="ml-2 text-sm text-gray-600">
@@ -510,7 +569,7 @@ export default function CreateJob() {
                   name="job_field"
                   value={field.value}
                   checked={formData.fields.job_field === field.value}
-                  onChange={handleJobFieldChange} // You'll need to implement this function
+                  onChange={handleJobFieldChange}
                   className="rounded border-gray-300 text-indigo-600 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   required
                 />
@@ -520,6 +579,15 @@ export default function CreateJob() {
               </label>
             ))}
           </div>
+        </div>
+
+        <div className="pb-20px">
+          <ReCAPTCHA
+            size="normal"
+            sitekey={RECAPTCHA_KEY_ID}
+            onChange={onCaptchaChange}
+            ref={recaptcha}
+          />
         </div>
 
         <button
