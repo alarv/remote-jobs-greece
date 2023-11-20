@@ -62,8 +62,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const apiURL = process.env.API_URL!;
-  const requestBody = await request.json();
-  const captchaToken = requestBody.captchaToken;
+  const formData = await request.formData();
+  const captchaToken = formData.get('captchaToken') as string;
 
   const { isRateLimited, limit, limitRemaining } = checkRateLimit(
     request,
@@ -91,30 +91,28 @@ export async function POST(request: NextRequest) {
       },
     );
   }
-
-  const attachmentId = await uploadMedia(request);
-
-  const headers = new Headers();
-  headers.append('Content-Type', 'application/json');
-  headers.append('Authorization', `Basic ${process.env.WORDPRESS_AUTH_HEADER}`);
-
-  const body = JSON.stringify({
-    title: 'Your Job Title',
-    content: 'content',
-    fields: {
-      ...requestBody,
-      fields: {
-        ...requestBody.fields,
-        company_logo: attachmentId,
-      },
-    },
-  });
+  let attachmentId;
+  try {
+    attachmentId = await uploadMedia(formData);
+  } catch (err) {
+    console.error(err);
+    return Response.error();
+  }
 
   try {
+    const headers = new Headers();
+    headers.append(
+      'Authorization',
+      `Basic ${process.env.WORDPRESS_AUTH_HEADER}`,
+    );
+
+    formData.set('fields[company_logo]', attachmentId.toString());
+    formData.delete('captchaToken');
+
     const response = await fetch(`${apiURL}/wp-json/wp/v2/jobs`, {
       method: 'POST',
       headers,
-      body,
+      body: formData,
     });
 
     const data = await response.json();
@@ -135,10 +133,9 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function uploadMedia(request: NextRequest) {
+async function uploadMedia(reqFormData: FormData) {
   const apiURL = process.env.API_URL!;
-  const reqFormData = await request.formData();
-  const media = reqFormData.get('companyLogo') as Blob;
+  const media = reqFormData.get('fields[company_logo]') as File;
 
   if (!media) {
     throw new Error('Company logo missing');
@@ -148,7 +145,7 @@ async function uploadMedia(request: NextRequest) {
   formData.append('file', media);
 
   const headers = new Headers();
-  headers.append('Authorization', `Basic ${process.env.WORDPRESS_AUTH_TOKEN}`);
+  headers.append('Authorization', `Basic ${process.env.WORDPRESS_AUTH_HEADER}`);
 
   const requestOptions = {
     method: 'POST',
@@ -159,5 +156,9 @@ async function uploadMedia(request: NextRequest) {
   const response = await fetch(`${apiURL}/wp-json/wp/v2/media`, requestOptions);
 
   const mediaResponse = await response.json();
+  if (!response.ok) {
+    console.error(mediaResponse);
+    throw new Error('Could not upload company logo');
+  }
   return mediaResponse.id;
 }
