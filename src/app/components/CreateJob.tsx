@@ -23,6 +23,7 @@ import { serialize } from 'object-to-formdata';
 const RECAPTCHA_KEY_ID = '6LeMyxIpAAAAAIgSBtBuI2_MGpbhJKGyw3dfMYTA';
 interface CreateJobFields {
   company_name: string;
+  company_email: string;
   company_logo: File | undefined;
   employment_type: string[];
   job_field: string;
@@ -91,6 +92,7 @@ export default function CreateJob() {
     content: '',
     fields: {
       company_name: '',
+      company_email: '',
       company_logo: undefined,
       employment_type: [],
       job_field: '',
@@ -428,6 +430,24 @@ export default function CreateJob() {
             name="fields.company_name"
             placeholder="Company Name"
             value={formData.fields.company_name}
+            onChange={handleChange}
+            className="w-full rounded-md p-2 border border-gray-300"
+            required
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="fields.company_email"
+            className="block text-sm font-medium text-gray-600"
+          >
+            Company Email
+          </label>
+          <input
+            type="text"
+            name="fields.company_email"
+            placeholder="Company Email"
+            value={formData.fields.company_email}
             onChange={handleChange}
             className="w-full rounded-md p-2 border border-gray-300"
             required
