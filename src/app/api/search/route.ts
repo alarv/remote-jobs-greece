@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isDevEnvironment } from '@/app/util/env.util';
-import rateLimit, { retrieveIp } from '@/app/util/rate-limit.util';
+import {
+  checkRateLimit,
+  generateRateLimitHeaders,
+  rateLimit,
+} from '@/app/util/rate-limit.util';
 import { retrievePagesFromHeaders } from '@/app/util/res.util';
 
 const REQUEST_RATE_LIMIT = 10;
@@ -12,23 +16,19 @@ const limiter = rateLimit({
   uniqueTokenPerInterval: 500, // Max 500 users per second
 });
 
-export async function GET(req: NextRequest) {
+export async function GET(request: NextRequest) {
   const apiURL = process.env.API_URL!;
   const jobQueryParam = 'subtype=job';
 
-  const searchTerm = req.nextUrl.searchParams.get('searchTerm');
-
+  const searchTerm = request.nextUrl.searchParams.get('searchTerm');
   const queryString = `search=${searchTerm}&${jobQueryParam}`;
 
-  const ip = retrieveIp(req);
-  if (!ip) {
-    console.warn('req ip could not be retrieved');
-  }
-
-  const { isRateLimited, limit, limitRemaining } = limiter.check(
+  const { isRateLimited, limit, limitRemaining } = checkRateLimit(
+    request,
+    limiter,
     REQUEST_RATE_LIMIT,
-    `${CACHE_KEY_PREFIX}_${ip}`,
-  ); // 10 requests per minute per IP
+    CACHE_KEY_PREFIX,
+  );
 
   if (isRateLimited) {
     return NextResponse.json(
@@ -55,8 +55,7 @@ export async function GET(req: NextRequest) {
       },
       {
         headers: {
-          'X-RateLimit-Limit': limit,
-          'X-RateLimit-Remaining': limitRemaining,
+          ...generateRateLimitHeaders(limit, limitRemaining),
         },
       },
     );

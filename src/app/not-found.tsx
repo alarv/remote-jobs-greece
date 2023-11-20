@@ -1,4 +1,15 @@
 import Link from 'next/link';
+import Image from 'next/image';
+import React from 'react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '404 | Remote Jobs Greece',
+  description: 'Could not find the page you are looking for',
+  openGraph: {
+    images: ['https://i.imgur.com/Tamd8rD.png'],
+  },
+};
 
 export default function NotFound() {
   return (
@@ -11,6 +22,15 @@ export default function NotFound() {
         <p className="mt-6 text-base leading-7 text-gray-600">
           Sorry, we couldn’t find the page you’re looking for.
         </p>
+        <div className="flex items-center justify-center">
+          <Image
+            alt="no jobs sad ghost"
+            src="https://i.imgur.com/uvZdUXX.png"
+            width={100}
+            height={100}
+            className="py-3"
+          />
+        </div>
         <div className="mt-10 flex items-center justify-center gap-x-6">
           <Link
             href="/"
@@ -18,9 +38,9 @@ export default function NotFound() {
           >
             Go back home
           </Link>
-          <a href="#" className="text-sm font-semibold text-gray-900">
+          <Link href="/contact" className="text-sm font-semibold text-gray-900">
             Contact support <span aria-hidden="true">&rarr;</span>
-          </a>
+          </Link>
         </div>
       </div>
     </main>

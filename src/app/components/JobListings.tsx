@@ -49,7 +49,6 @@ async function searchJobs(
     );
 
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (err) {
     console.error('page jobs could not be retrieved');

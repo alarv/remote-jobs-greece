@@ -17,7 +17,6 @@ export interface IJob {
     company_name: string;
     company_logo: string;
     employment_type: string[];
-    job_type: string;
     salary_minimum_range: number;
     salary_maximum_range: number;
     salary_time_frame: string;

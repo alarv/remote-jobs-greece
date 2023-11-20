@@ -1,10 +1,20 @@
 import { LRUCache } from 'lru-cache';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 type Options = {
   uniqueTokenPerInterval?: number;
   interval?: number;
 };
+
+export interface RateLimiter {
+  check: (limit: number, cacheKey: string) => RateLimitStatus;
+}
+
+export interface RateLimitStatus {
+  isRateLimited: boolean;
+  limit: string;
+  limitRemaining: string;
+}
 
 export function retrieveIp(req: NextRequest): string | null {
   let ipAddress = req.ip || req.headers.get('x-real-ip');
@@ -17,7 +27,7 @@ export function retrieveIp(req: NextRequest): string | null {
   return ipAddress;
 }
 
-export default function rateLimit(options?: Options) {
+export function rateLimit(options?: Options): RateLimiter {
   const tokenCache = new LRUCache({
     max: options?.uniqueTokenPerInterval || 500,
     ttl: options?.interval || 60000,
@@ -41,3 +51,30 @@ export default function rateLimit(options?: Options) {
     },
   };
 }
+
+export function checkRateLimit(
+  request: NextRequest,
+  limiter: RateLimiter,
+  requestRateLimit: number,
+  cacheKeyPrefix: string,
+): RateLimitStatus {
+  const ip = retrieveIp(request);
+  if (!ip) {
+    console.warn('request ip could not be retrieved');
+  }
+
+  const { isRateLimited, limit, limitRemaining } = limiter.check(
+    requestRateLimit,
+    `${cacheKeyPrefix}_${ip}`,
+  ); // 10 requests per minute per IP
+
+  return { isRateLimited, limit, limitRemaining };
+}
+
+export const generateRateLimitHeaders = (
+  limit: string,
+  limitRemaining: string,
+) => ({
+  'X-RateLimit-Limit': limit,
+  'X-RateLimit-Remaining': limitRemaining,
+});

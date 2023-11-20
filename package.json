@@ -16,9 +16,11 @@
     "cookies-next": "^4.0.0",
     "lru-cache": "^10.0.2",
     "next": "13.5.4",
+    "object-to-formdata": "^4.5.1",
     "react": "^18",
     "react-dom": "^18",
     "react-google-recaptcha": "^3.1.0",
+    "react-quill": "^2.0.0",
     "styled-jsx": "^5.1.2",
     "uuid": "^9.0.1"
   },
