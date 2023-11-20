@@ -4,12 +4,29 @@ import React, {
   ChangeEvent,
   FormEvent,
   RefObject,
+  useMemo,
   useRef,
   useState,
 } from 'react';
 import { ReCAPTCHA } from 'react-google-recaptcha';
+import 'react-quill/dist/quill.snow.css';
+import dynamic from 'next/dynamic';
 
 const RECAPTCHA_KEY_ID = '6LeMyxIpAAAAAIgSBtBuI2_MGpbhJKGyw3dfMYTA';
+const quillModules = {
+  toolbar: [
+    [{ header: [1, 2, false] }],
+    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    [
+      { list: 'ordered' },
+      { list: 'bullet' },
+      { indent: '-1' },
+      { indent: '+1' },
+    ],
+    ['link', 'image'],
+    ['clean'],
+  ],
+};
 
 interface CreateJobFields {
   company_name: string;
@@ -43,11 +60,17 @@ function generateFormData(data: CreateJobForm) {
 }
 
 export default function CreateJob() {
+  // initialize ReactQuill
+  const ReactQuill = useMemo(
+    () => dynamic(() => import('react-quill'), { ssr: false }),
+    [],
+  );
+
   const EMPTY_FORM: CreateJobForm = {
-    title: 'τιτλε',
-    content: 'content',
+    title: '',
+    content: '',
     fields: {
-      company_name: 'yes',
+      company_name: '',
       company_logo: undefined,
     },
     captchaToken: null,
@@ -60,6 +83,10 @@ export default function CreateJob() {
   // Create a ref for the reCAPTCHA widget
   const recaptcha: RefObject<ReCAPTCHA> = useRef(null);
 
+  // Create a ref for the file input
+  const companyLogoFileRef = useRef<HTMLInputElement>(null);
+
+  // create ref for quill rich text editor
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -72,18 +99,19 @@ export default function CreateJob() {
         body: generateFormData(formData),
       });
 
-      const data = await response.json();
       if (response.status === 200) {
         setIsSuccess(true);
         setTimeout(() => {
           setIsSuccess(false);
         }, 5000);
-        setFormData(EMPTY_FORM);
+        setFormData({ ...EMPTY_FORM });
         recaptcha?.current?.reset(); // reset recaptcha after submission
+        companyLogoFileRef.current!.value = '';
       } else {
         setIsError(true);
       }
     } catch (err) {
+      console.error(err);
       setIsError(true);
     } finally {
       setIsLoading(false);
@@ -104,6 +132,7 @@ export default function CreateJob() {
       e.target.value = '';
       return;
     }
+    debugger;
 
     setFormData({
       ...formData,
@@ -129,8 +158,15 @@ export default function CreateJob() {
         },
       }));
     } else {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [e.target.name]: e.target.value,
+      }));
     }
+  };
+
+  const handleContentChange = (value: string) => {
+    setFormData((prevFormData) => ({ ...prevFormData, content: value }));
   };
 
   const onCaptchaChange = (value: string | null) => {
@@ -142,6 +178,29 @@ export default function CreateJob() {
 
   return (
     <>
+      {isSuccess && (
+        <div
+          className="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+          role="alert"
+        >
+          <svg
+            className="flex-shrink-0 inline w-4 h-4 me-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+          </svg>
+          <span className="sr-only">Info</span>
+          <div>
+            <span className="font-medium">Success!</span> The form was submitted
+            successfully! The job will be published once it passes the review of
+            one of our admins!
+          </div>
+        </div>
+      )}
+
       {isError && (
         <div
           className="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
@@ -163,6 +222,7 @@ export default function CreateJob() {
           </div>
         </div>
       )}
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label
@@ -177,26 +237,24 @@ export default function CreateJob() {
             placeholder="Job Title"
             value={formData.title}
             onChange={handleChange}
-            className="w-full p-2 border border-gray-300"
+            className="w-full rounded-md p-2 border border-gray-300"
             required
           />
         </div>
 
         {/* TODO replace this textarea with a rich text editor of your choice */}
-        <div>
+        <div className="w-full rounded-md h-30">
           <label
             htmlFor="content"
             className="block text-sm font-medium text-gray-600"
           >
             Job Content
           </label>
-          <textarea
-            placeholder="Job Content"
-            name="content"
+          <ReactQuill
+            theme="snow"
             value={formData.content}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300"
-            required
+            onChange={handleContentChange}
+            modules={quillModules}
           />
         </div>
 
@@ -213,7 +271,7 @@ export default function CreateJob() {
             placeholder="Company Name"
             value={formData.fields.company_name}
             onChange={handleChange}
-            className="w-full p-2 border border-gray-300"
+            className="w-full rounded-md p-2 border border-gray-300"
             required
           />
         </div>
@@ -228,10 +286,17 @@ export default function CreateJob() {
           <input
             type="file"
             name="company_logo"
+            ref={companyLogoFileRef}
             onChange={handleFileChange}
-            className="w-full p-2 border border-gray-300"
+            className="block w-full rounded-md p-2 block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"
             required
           />
+          <p
+            className="mt-1 text-sm text-gray-500 dark:text-gray-300"
+            id="file_input_help"
+          >
+            Square image PNG or JPG (MAX. 500x500px).
+          </p>
         </div>
 
         <div className="pb-20px">
