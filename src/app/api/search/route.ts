@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isDevEnvironment } from '@/app/util/env.util';
-import { checkRateLimit, rateLimit } from '@/app/util/rate-limit.util';
+import {
+  checkRateLimit,
+  generateRateLimitHeaders,
+  rateLimit,
+} from '@/app/util/rate-limit.util';
 import { retrievePagesFromHeaders } from '@/app/util/res.util';
 
 const REQUEST_RATE_LIMIT = 10;
@@ -51,8 +55,7 @@ export async function GET(request: NextRequest) {
       },
       {
         headers: {
-          'X-RateLimit-Limit': limit,
-          'X-RateLimit-Remaining': limitRemaining,
+          ...generateRateLimitHeaders(limit, limitRemaining),
         },
       },
     );

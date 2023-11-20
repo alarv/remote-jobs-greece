@@ -10,6 +10,7 @@ const nextConfig = {
     ZOHO_CLIENT_SECRET: process.env.ZOHO_CLIENT_SECRET,
     ZOHO_REFRESH_TOKEN: process.env.ZOHO_REFRESH_TOKEN,
     ZOHO_ACCOUNT_ID: process.env.ZOHO_ACCOUNT_ID,
+    WORDPRESS_AUTH_HEADER: process.env.WORDPRESS_AUTH_HEADER,
   },
   images: {
     remotePatterns: [

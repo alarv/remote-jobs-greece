@@ -5,10 +5,12 @@ import { retrievePagesFromHeaders } from '@/app/util/res.util';
 import { prefixFilterKeysWithFilters } from '@/app/util/jobs.util';
 import {
   checkRateLimit,
+  generateRateLimitHeaders,
   rateLimit,
   retrieveIp,
 } from '@/app/util/rate-limit.util';
 import { hasInvalidGoogleRecaptcha } from '@/app/util/recaptcha.util';
+import { FormData } from 'next/dist/compiled/@edge-runtime/primitives';
 
 export interface JobsResponse {
   total: number;
@@ -89,4 +91,73 @@ export async function POST(request: NextRequest) {
       },
     );
   }
+
+  const attachmentId = await uploadMedia(request);
+
+  const headers = new Headers();
+  headers.append('Content-Type', 'application/json');
+  headers.append('Authorization', `Basic ${process.env.WORDPRESS_AUTH_HEADER}`);
+
+  const body = JSON.stringify({
+    title: 'Your Job Title',
+    content: 'content',
+    fields: {
+      ...requestBody,
+      fields: {
+        ...requestBody.fields,
+        company_logo: attachmentId,
+      },
+    },
+  });
+
+  try {
+    const response = await fetch(`${apiURL}/wp-json/wp/v2/jobs`, {
+      method: 'POST',
+      headers,
+      body,
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error(data);
+      return Response.error();
+    }
+
+    return Response.json(data, {
+      headers: {
+        ...generateRateLimitHeaders(limit, limitRemaining),
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    return Response.error();
+  }
+}
+
+async function uploadMedia(request: NextRequest) {
+  const apiURL = process.env.API_URL!;
+  const reqFormData = await request.formData();
+  const media = reqFormData.get('companyLogo') as Blob;
+
+  if (!media) {
+    throw new Error('Company logo missing');
+  }
+
+  const formData = new FormData();
+  formData.append('file', media);
+
+  const headers = new Headers();
+  headers.append('Authorization', `Basic ${process.env.WORDPRESS_AUTH_TOKEN}`);
+
+  const requestOptions = {
+    method: 'POST',
+    headers,
+    body: formData,
+  };
+
+  const response = await fetch(`${apiURL}/wp-json/wp/v2/media`, requestOptions);
+
+  const mediaResponse = await response.json();
+  return mediaResponse.id;
 }

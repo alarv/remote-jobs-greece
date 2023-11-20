@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
   checkRateLimit,
+  generateRateLimitHeaders,
   rateLimit,
   retrieveIp,
 } from '@/app/util/rate-limit.util';
@@ -63,8 +64,7 @@ export async function POST(request: NextRequest) {
 
     return Response.json(data, {
       headers: {
-        'X-RateLimit-Limit': limit,
-        'X-RateLimit-Remaining': limitRemaining,
+        ...generateRateLimitHeaders(limit, limitRemaining),
       },
     });
   } catch (err) {

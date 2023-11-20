@@ -70,3 +70,11 @@ export function checkRateLimit(
 
   return { isRateLimited, limit, limitRemaining };
 }
+
+export const generateRateLimitHeaders = (
+  limit: string,
+  limitRemaining: string,
+) => ({
+  'X-RateLimit-Limit': limit,
+  'X-RateLimit-Remaining': limitRemaining,
+});
