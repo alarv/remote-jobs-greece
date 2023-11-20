@@ -1,28 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
-import rateLimit, { retrieveIp } from '@/app/util/rate-limit.util';
+import {
+  checkRateLimit,
+  rateLimit,
+  retrieveIp,
+} from '@/app/util/rate-limit.util';
 import { getToken, sendEmail } from '@/app/api/contact/zoho.api';
+import { hasInvalidGoogleRecaptcha } from '@/app/util/recaptcha.util';
 
 const REQUEST_RATE_LIMIT = 10;
 const REQUEST_TIME_WINDOW_IN_MS = 60 * 1000; // 60 seconds
 const CACHE_KEY_PREFIX = 'contact';
 
 const limiter = rateLimit({
-  interval: REQUEST_TIME_WINDOW_IN_MS, // 10 minutes
+  interval: REQUEST_TIME_WINDOW_IN_MS, // 60 seconds
   uniqueTokenPerInterval: 500, // Max 500 users per second
 });
 
 export async function POST(request: NextRequest) {
-  const apiURL = process.env.API_URL!;
+  const requestBody = await request.json();
+  const captchaToken = requestBody.captchaToken;
 
-  const ip = retrieveIp(request);
-  if (!ip) {
-    console.warn('request ip could not be retrieved');
-  }
-
-  const { isRateLimited, limit, limitRemaining } = limiter.check(
+  const { isRateLimited, limit, limitRemaining } = checkRateLimit(
+    request,
+    limiter,
     REQUEST_RATE_LIMIT,
-    `${CACHE_KEY_PREFIX}_${ip}`,
-  ); // 10 requests per minute per IP
+    CACHE_KEY_PREFIX,
+  );
 
   if (isRateLimited) {
     return NextResponse.json(
@@ -33,24 +36,9 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const requestBody = await request.json();
-
-  // Google reCaptcha check
-  try {
-    const response = await fetch(
-      `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${requestBody.captchaToken}`,
-      { method: 'POST' },
-    );
-
-    if (response.status !== 200) {
-      return NextResponse.json(
-        { message: 'reCAPTCHA verification failed.' },
-        {
-          status: 400,
-        },
-      );
-    }
-  } catch (e) {
+  const isInvalidGoogleRecaptcha =
+    await hasInvalidGoogleRecaptcha(captchaToken);
+  if (isInvalidGoogleRecaptcha) {
     return NextResponse.json(
       { message: 'reCAPTCHA verification failed.' },
       {

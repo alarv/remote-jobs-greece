@@ -36,7 +36,7 @@ export async function generateMetadata(
   const job = await getJob(id);
 
   return {
-    title: `${job?.title.rendered} | Remote jobs Greece`,
+    title: `${job?.title.rendered ?? 'Job'} | Remote jobs Greece`,
     openGraph: {
       title: `${job?.title.rendered} | Remote jobs Greece`,
       description: 'Take a look at this remote job position in Greece',
