@@ -122,11 +122,14 @@ export async function POST(request: NextRequest) {
       return Response.error();
     }
 
-    return Response.json(data, {
-      headers: {
-        ...generateRateLimitHeaders(limit, limitRemaining),
+    return Response.json(
+      {},
+      {
+        headers: {
+          ...generateRateLimitHeaders(limit, limitRemaining),
+        },
       },
-    });
+    );
   } catch (err) {
     console.error(err);
     return Response.error();

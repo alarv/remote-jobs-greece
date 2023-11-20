@@ -4,6 +4,7 @@ import React, {
   ChangeEvent,
   FormEvent,
   RefObject,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -11,8 +12,30 @@ import React, {
 import { ReCAPTCHA } from 'react-google-recaptcha';
 import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic';
+import {
+  employmentTypeCatalog,
+  experienceCatalog,
+  jobFieldCatalog,
+} from '@/app/model/api.model';
+import { serialize } from 'object-to-formdata';
 
 const RECAPTCHA_KEY_ID = '6LeMyxIpAAAAAIgSBtBuI2_MGpbhJKGyw3dfMYTA';
+interface CreateJobFields {
+  company_name: string;
+  company_logo: File | undefined;
+  employment_type: string[];
+  job_field: string;
+  experience: string[];
+  // languages: string[];
+  // working_conditions: {
+  //   rendered: string;
+  // };
+  job_url: string;
+  salary_minimum_range?: number;
+  salary_maximum_range?: number;
+  salary_time_frame?: string;
+}
+
 const quillModules = {
   toolbar: [
     [{ header: [1, 2, false] }],
@@ -23,15 +46,10 @@ const quillModules = {
       { indent: '-1' },
       { indent: '+1' },
     ],
-    ['link', 'image'],
+    ['link'],
     ['clean'],
   ],
 };
-
-interface CreateJobFields {
-  company_name: string;
-  company_logo: File | undefined;
-}
 
 interface CreateJobForm {
   title: string;
@@ -72,19 +90,51 @@ export default function CreateJob() {
     fields: {
       company_name: '',
       company_logo: undefined,
+      employment_type: [],
+      job_field: '',
+      experience: [],
+      job_url: '',
     },
     captchaToken: null,
   };
+
   const [formData, setFormData] = useState({ ...EMPTY_FORM });
+  const [employmentTypes, setEmploymentTypes] = useState<string[]>([]);
+  const [experiences, setExperiences] = useState<string[]>([]);
+  const [jobField, setJobField] = useState<string>('');
+
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isEmploymentTypeValid, setIsEmploymentTypeValid] = useState(true);
+  const [isExperienceValid, setIsExperienceValid] = useState(true);
 
   // Create a ref for the reCAPTCHA widget
   const recaptcha: RefObject<ReCAPTCHA> = useRef(null);
 
   // Create a ref for the file input
   const companyLogoFileRef = useRef<HTMLInputElement>(null);
+
+  function validateEmploymentType() {
+    const isValid = formData.fields.employment_type.length > 0;
+    setIsEmploymentTypeValid(isValid);
+    return isValid;
+  }
+
+  function validateExperience() {
+    const isValid = formData.fields.experience.length > 0;
+    setIsExperienceValid(isValid);
+    return isValid;
+  }
+
+  function clearForm() {
+    setFormData({ ...EMPTY_FORM });
+    setEmploymentTypes([]);
+    setExperiences([]);
+    setJobField('');
+    recaptcha?.current?.reset(); // reset recaptcha after submission
+    companyLogoFileRef.current!.value = '';
+  }
 
   // create ref for quill rich text editor
   const handleSubmit = async (e: FormEvent) => {
@@ -93,10 +143,22 @@ export default function CreateJob() {
     setIsLoading(true);
     setIsError(false);
 
+    const isFormValid = validateEmploymentType() && validateExperience(); // add other validations if needed
+    if (!isFormValid) {
+      setIsLoading(false);
+      return;
+    }
+
+    formData.fields['employment_type'] = employmentTypes;
+    formData.fields['experience'] = experiences;
+    formData.fields['job_field'] = jobField;
+
+    const body = serialize(formData);
+
     try {
       const response = await fetch('/api/jobs', {
         method: 'POST',
-        body: generateFormData(formData),
+        body: serialize(formData),
       });
 
       if (response.status === 200) {
@@ -104,9 +166,7 @@ export default function CreateJob() {
         setTimeout(() => {
           setIsSuccess(false);
         }, 5000);
-        setFormData({ ...EMPTY_FORM });
-        recaptcha?.current?.reset(); // reset recaptcha after submission
-        companyLogoFileRef.current!.value = '';
+        clearForm();
       } else {
         setIsError(true);
       }
@@ -132,8 +192,6 @@ export default function CreateJob() {
       e.target.value = '';
       return;
     }
-    debugger;
-
     setFormData({
       ...formData,
       fields: {
@@ -144,7 +202,7 @@ export default function CreateJob() {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     if (e.target.name.includes('fields.')) {
       const [fieldName, nestedFieldName] = e.target.name.split('.');
@@ -169,12 +227,75 @@ export default function CreateJob() {
     setFormData((prevFormData) => ({ ...prevFormData, content: value }));
   };
 
+  const handleExperienceChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const item = e.target.value;
+    const isChecked = e.target.checked;
+
+    if (isChecked) {
+      setExperiences([...experiences, item]);
+    } else {
+      setExperiences(experiences.filter((el) => el !== item));
+    }
+  };
+
+  const handleEmploymentTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const item = e.target.value;
+    const isChecked = e.target.checked;
+
+    if (isChecked) {
+      setEmploymentTypes([...employmentTypes, item]);
+    } else {
+      setEmploymentTypes(employmentTypes.filter((el) => el !== item));
+    }
+  };
+
+  const handleJobFieldChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const item = e.target.value;
+    const isChecked = e.target.checked;
+
+    if (isChecked) {
+      setJobField(item);
+    } else {
+      setJobField('');
+    }
+  };
+
   const onCaptchaChange = (value: string | null) => {
     // Set the captcha token when the user completes the reCAPTCHA
     if (value) {
       formData.captchaToken = value;
     }
   };
+
+  useEffect(() => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      fields: {
+        ...prevFormData.fields,
+        employment_type: employmentTypes,
+      },
+    }));
+  }, [employmentTypes]);
+
+  useEffect(() => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      fields: {
+        ...prevFormData.fields,
+        experience: experiences,
+      },
+    }));
+  }, [experiences]);
+
+  useEffect(() => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      fields: {
+        ...prevFormData.fields,
+        job_field: jobField,
+      },
+    }));
+  }, [jobField]);
 
   return (
     <>
@@ -223,7 +344,7 @@ export default function CreateJob() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="w-full space-y-4">
         <div>
           <label
             htmlFor="title"
@@ -242,7 +363,6 @@ export default function CreateJob() {
           />
         </div>
 
-        {/* TODO replace this textarea with a rich text editor of your choice */}
         <div className="w-full rounded-md h-30">
           <label
             htmlFor="content"
@@ -270,6 +390,24 @@ export default function CreateJob() {
             name="fields.company_name"
             placeholder="Company Name"
             value={formData.fields.company_name}
+            onChange={handleChange}
+            className="w-full rounded-md p-2 border border-gray-300"
+            required
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="fields.job_url"
+            className="block text-sm font-medium text-gray-600"
+          >
+            Job Url
+          </label>
+          <input
+            type="url"
+            name="fields.job_url"
+            placeholder="Job Url"
+            value={formData.fields.job_url}
             onChange={handleChange}
             className="w-full rounded-md p-2 border border-gray-300"
             required
@@ -308,6 +446,82 @@ export default function CreateJob() {
           />
         </div>
 
+        <div>
+          <span className="block text-gray-600">Employment Type</span>
+          <div className="flex items-center gap-4 mt-2 flex-wrap">
+            {employmentTypeCatalog.options.map((field) => (
+              <label key={field.value} className="flex items-center">
+                <input
+                  type="checkbox"
+                  name="employment_type"
+                  value={field.value}
+                  checked={formData.fields.employment_type.includes(
+                    field.value,
+                  )}
+                  onChange={handleEmploymentTypeChange} // You'll need to implement this function
+                  className="rounded border-gray-300 text-indigo-600 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+                <span className="ml-2 text-sm text-gray-600">
+                  {field.label}
+                </span>
+              </label>
+            ))}
+          </div>
+          {!isEmploymentTypeValid && (
+            <p className="mt-1 text-sm text-red-500">
+              Please select at least one employment type.
+            </p>
+          )}
+        </div>
+
+        <div>
+          <span className="block text-gray-600">Experience</span>
+          <div className="flex items-center gap-4 mt-2 flex-wrap">
+            {experienceCatalog.options.map((field) => (
+              <label key={field.value} className="flex items-center">
+                <input
+                  type="checkbox"
+                  name="experience"
+                  value={field.value}
+                  checked={formData.fields.experience.includes(field.value)}
+                  onChange={handleExperienceChange} // You'll need to implement this function
+                  className="rounded border-gray-300 text-indigo-600 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+                <span className="ml-2 text-sm text-gray-600">
+                  {field.label}
+                </span>
+              </label>
+            ))}
+          </div>
+          {!isExperienceValid && (
+            <p className="mt-1 text-sm text-red-500">
+              Please select at least one experience type.
+            </p>
+          )}
+        </div>
+
+        <div>
+          <span className="block text-gray-600">Job field</span>
+          <div className="flex flex-col mt-2 flex-wrap">
+            {jobFieldCatalog.options.map((field) => (
+              <label key={field.value} className="flex items-center">
+                <input
+                  type="radio"
+                  name="job_field"
+                  value={field.value}
+                  checked={formData.fields.job_field === field.value}
+                  onChange={handleJobFieldChange} // You'll need to implement this function
+                  className="rounded border-gray-300 text-indigo-600 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  required
+                />
+                <span className="ml-2 text-sm text-gray-600">
+                  {field.label}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+
         <button
           disabled={isLoading}
           type="submit"
@@ -338,6 +552,51 @@ export default function CreateJob() {
           Submit
         </button>
       </form>
+
+      {isSuccess && (
+        <div
+          className="flex items-center p-4 mt-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+          role="alert"
+        >
+          <svg
+            className="flex-shrink-0 inline w-4 h-4 me-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+          </svg>
+          <span className="sr-only">Info</span>
+          <div>
+            <span className="font-medium">Success!</span> The form was submitted
+            successfully! The job will be published once it passes the review of
+            one of our admins!
+          </div>
+        </div>
+      )}
+
+      {isError && (
+        <div
+          className="flex items-center p-4 mt-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+          role="alert"
+        >
+          <svg
+            className="flex-shrink-0 inline w-4 h-4 me-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+          </svg>
+          <span className="sr-only">Info</span>
+          <div>
+            <span className="font-medium">Error!</span> An error occurred,
+            please try again later!
+          </div>
+        </div>
+      )}
     </>
   );
 }
