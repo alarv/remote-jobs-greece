@@ -61,25 +61,6 @@ interface CreateJobForm {
   captchaToken: string | null;
 }
 
-function generateFormData(data: CreateJobForm) {
-  const formData = new FormData();
-  for (let dataKey in data) {
-    if (dataKey === 'fields') {
-      // append nested object
-      for (let fieldKey in data[dataKey]) {
-        formData.append(
-          `fields[${fieldKey}]`,
-          (data[dataKey] as any)[fieldKey],
-        );
-      }
-    } else {
-      formData.append(dataKey, (data as any)[dataKey]);
-    }
-  }
-
-  return formData;
-}
-
 export default function CreateJob() {
   // initialize ReactQuill dynamically otherwise it causes an import issue
   const ReactQuill = useMemo(
@@ -339,6 +320,13 @@ export default function CreateJob() {
 
   return (
     <>
+      <h2 className="text-2xl font-semibold mb-4">Post Your Job Listing</h2>
+
+      <p className="mb-4 text-sm">
+        Fill out the form to post your job. After submission, our team will
+        review it, typically within 24 hours. Once approved, your job will be
+        live on our site, accessible to qualified candidates across Greece.
+      </p>
       {isSuccess && (
         <div
           className="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
