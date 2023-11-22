@@ -378,7 +378,7 @@ export default function CreateJob() {
             htmlFor="title"
             className="block text-sm font-medium text-gray-600"
           >
-            Job Title
+            Job Title*
           </label>
           <input
             type="text"
@@ -396,7 +396,7 @@ export default function CreateJob() {
             htmlFor="content"
             className="block text-sm font-medium text-gray-600"
           >
-            Job Content
+            Job Content*
           </label>
           <ReactQuill
             theme="snow"
@@ -411,7 +411,7 @@ export default function CreateJob() {
             htmlFor="fields.company_name"
             className="block text-sm font-medium text-gray-600"
           >
-            Company Name
+            Company Name*
           </label>
           <input
             type="text"
@@ -429,7 +429,7 @@ export default function CreateJob() {
             htmlFor="fields.company_email"
             className="block text-sm font-medium text-gray-600"
           >
-            Company Email
+            Company Email*
           </label>
           <input
             type="email"
@@ -447,7 +447,7 @@ export default function CreateJob() {
             htmlFor="fields.job_url"
             className="block text-sm font-medium text-gray-600"
           >
-            Job Url
+            Job Url*
           </label>
           <input
             type="url"
@@ -465,7 +465,7 @@ export default function CreateJob() {
             htmlFor="company_logo"
             className="block text-sm font-medium text-gray-600"
           >
-            Company Logo
+            Company Logo*
           </label>
           <input
             type="file"
@@ -485,7 +485,9 @@ export default function CreateJob() {
         </div>
 
         <div>
-          <span className="block text-gray-600">Remote Work Type</span>
+          <span className="block text-sm font-medium text-gray-600">
+            Remote Work Type*
+          </span>
           <div className="flex items-center gap-4 mt-2 flex-wrap">
             {remoteWorkTypeCatalog.options.map((field) => (
               <label key={field.value} className="flex items-center">
@@ -514,7 +516,9 @@ export default function CreateJob() {
         </div>
 
         <div>
-          <span className="block text-gray-600">Employment Type</span>
+          <span className="block text-sm font-medium text-gray-600">
+            Employment Type*
+          </span>
           <div className="flex items-center gap-4 mt-2 flex-wrap">
             {employmentTypeCatalog.options.map((field) => (
               <label key={field.value} className="flex items-center">
@@ -542,7 +546,9 @@ export default function CreateJob() {
         </div>
 
         <div>
-          <span className="block text-gray-600">Experience</span>
+          <span className="block text-sm font-medium text-gray-600">
+            Experience*
+          </span>
           <div className="flex items-center gap-4 mt-2 flex-wrap">
             {experienceCatalog.options.map((field) => (
               <label key={field.value} className="flex items-center">
@@ -568,7 +574,9 @@ export default function CreateJob() {
         </div>
 
         <div>
-          <span className="block text-gray-600">Job field</span>
+          <span className="block text-sm font-medium text-gray-600">
+            Job field*
+          </span>
           <div className="flex flex-col mt-2 flex-wrap">
             {jobFieldCatalog.options.map((field) => (
               <label key={field.value} className="flex items-center">
