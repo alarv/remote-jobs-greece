@@ -10,9 +10,15 @@ export async function hasInvalidGoogleRecaptcha(
     if (response.status !== 200) {
       return true;
     }
+    const data = await response.json();
+    console.log(data);
+
+    if (data.success === false) {
+      return true;
+    }
+
+    return data.score <= 0.5;
   } catch (e) {
     return true;
   }
-
-  return false;
 }

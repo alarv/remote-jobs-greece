@@ -1,15 +1,8 @@
 'use client';
 
-import React, {
-  ChangeEvent,
-  FormEvent,
-  RefObject,
-  useRef,
-  useState,
-} from 'react';
-import { ReCAPTCHA } from 'react-google-recaptcha';
-
-const RECAPTCHA_KEY_ID = '6LeMyxIpAAAAAIgSBtBuI2_MGpbhJKGyw3dfMYTA';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import RecaptchaNotice from '@/app/components/RecaptchaNotice';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -19,11 +12,11 @@ export default function Contact() {
     captchaToken: '',
   });
   const [successMsg, setSuccesssMsg] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<undefined | string>(undefined);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Create a ref for the reCAPTCHA widget
-  const recaptcha: RefObject<ReCAPTCHA> = useRef(null);
+  // Create a hook for the Google recaptcha
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -31,18 +24,17 @@ export default function Contact() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const onCaptchaChange = (value: string | null) => {
-    // Set the captcha token when the user completes the reCAPTCHA
-    if (value) {
-      formData.captchaToken = value;
-    }
-  };
-
   const submitForm = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (!executeRecaptcha) {
+      console.error('Execute recaptcha not yet available');
+      return;
+    }
+    const captchaToken = await executeRecaptcha('contactForm');
+
     setIsLoading(true);
-    setErrorMsg(false);
+    setErrorMsg(undefined);
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -50,7 +42,7 @@ export default function Contact() {
           Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, captchaToken }),
       });
 
       if (response.status === 200) {
@@ -59,12 +51,16 @@ export default function Contact() {
           setSuccesssMsg(false);
         }, 5000);
         setFormData({ name: '', email: '', message: '', captchaToken: '' });
-        recaptcha?.current?.reset(); // reset recaptcha after submission
       } else {
-        setErrorMsg(true);
+        const body = await response.json();
+        if (body.message === 'reCAPTCHA verification failed.') {
+          setErrorMsg(body.message);
+        } else {
+          setErrorMsg('An error occurred, please try again later');
+        }
       }
     } catch (e) {
-      setErrorMsg(true);
+      setErrorMsg('An error occurred, please try again later');
     } finally {
       setIsLoading(false);
     }
@@ -111,8 +107,7 @@ export default function Contact() {
           </svg>
           <span className="sr-only">Info</span>
           <div>
-            <span className="font-medium">Error!</span> An error occurred,
-            please try again later!
+            <span className="font-medium">Error!</span> {errorMsg}
           </div>
         </div>
       )}
@@ -141,7 +136,6 @@ export default function Contact() {
             required={true}
           />
         </div>
-
         <div>
           <label
             htmlFor="email"
@@ -159,7 +153,6 @@ export default function Contact() {
             required={true}
           />
         </div>
-
         <div>
           <label
             htmlFor="message"
@@ -176,15 +169,7 @@ export default function Contact() {
             required={true}
           ></textarea>
         </div>
-
-        <div className="pb-20px">
-          <ReCAPTCHA
-            size="normal"
-            sitekey={RECAPTCHA_KEY_ID}
-            onChange={onCaptchaChange}
-            ref={recaptcha}
-          />
-        </div>
+        <RecaptchaNotice />
 
         <button
           disabled={isLoading}

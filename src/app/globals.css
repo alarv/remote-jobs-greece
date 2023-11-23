@@ -65,3 +65,7 @@ body:after {
 .job__description ol, .job__description p, .entry-content p, .entry-content ul {
   margin-bottom: 2rem;
 }
+
+/*Hide the google recaptcha badge*/
+
+.grecaptcha-badge { visibility: hidden; }

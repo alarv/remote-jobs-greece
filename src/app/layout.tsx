@@ -6,6 +6,7 @@ import Header from '@/app/components/Header';
 import Footer from '@/app/components/Footer';
 import CookiesConsent from '@/app/components/CookiesConsent';
 import GoogleAnalytics from '@/app/components/GoogleAnalytics';
+import Providers from '@/app/providers';
 
 const interFont = Inter({
   subsets: ['latin'],
@@ -23,16 +24,18 @@ export default function RootLayout({
   return (
     <html lang="en" className={interFont.className}>
       <body>
-        <GoogleAnalytics ga_id={process.env.GA_MEASUREMENT_ID!} />
-        <CookiesConsent />
+        <Providers>
+          <GoogleAnalytics ga_id={process.env.GA_MEASUREMENT_ID!} />
+          <CookiesConsent />
 
-        <div id="main-container">
-          <Header />
-          <div id="content">
-            {children} {/* Your main content goes here */}
+          <div id="main-container">
+            <Header />
+            <div id="content">
+              {children} {/* Your main content goes here */}
+            </div>
+            <Footer />
           </div>
-          <Footer /> {/* This will be your sticky footer */}
-        </div>
+        </Providers>
       </body>
     </html>
   );

@@ -3,13 +3,12 @@
 import React, {
   ChangeEvent,
   FormEvent,
-  RefObject,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
-import { ReCAPTCHA } from 'react-google-recaptcha';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic';
 import {
@@ -19,8 +18,8 @@ import {
   remoteWorkTypeCatalog,
 } from '@/app/model/api.model';
 import { serialize } from 'object-to-formdata';
+import RecaptchaNotice from '@/app/components/RecaptchaNotice';
 
-const RECAPTCHA_KEY_ID = '6LeMyxIpAAAAAIgSBtBuI2_MGpbhJKGyw3dfMYTA';
 interface CreateJobFields {
   company_name: string;
   company_email: string;
@@ -97,8 +96,8 @@ export default function CreateJob() {
   const [isRemoteWorkTypeValid, setIsRemoteWorkTypeValid] = useState(true);
   const [isExperienceValid, setIsExperienceValid] = useState(true);
 
-  // Create a ref for the reCAPTCHA widget
-  const recaptcha: RefObject<ReCAPTCHA> = useRef(null);
+  // Create a hook for the Google recaptcha
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   // Create a ref for the file input
   const companyLogoFileRef = useRef<HTMLInputElement>(null);
@@ -126,7 +125,6 @@ export default function CreateJob() {
     setEmploymentTypes([]);
     setExperiences([]);
     setJobField('');
-    recaptcha?.current?.reset(); // reset recaptcha after submission
     companyLogoFileRef.current!.value = '';
   }
 
@@ -136,6 +134,12 @@ export default function CreateJob() {
 
     setIsLoading(true);
     setIsError(false);
+
+    if (!executeRecaptcha) {
+      console.error('Execute recaptcha not yet available');
+      return;
+    }
+    const captchaToken = await executeRecaptcha('createJobForm');
 
     const isEmploymentTypeValid = validateEmploymentType();
     const isExperienceValid = validateExperience();
@@ -153,6 +157,7 @@ export default function CreateJob() {
     formData.fields['experience'] = experiences;
     formData.fields['remote_work_types'] = remoteWorkTypes;
     formData.fields['job_field'] = jobField;
+    formData.captchaToken = captchaToken;
 
     const body = serialize(formData);
 
@@ -197,7 +202,7 @@ export default function CreateJob() {
       ...formData,
       fields: {
         ...formData.fields,
-        company_logo: e.target!.files![0],
+        company_logo: e.target.files[0],
       },
     });
   };
@@ -268,13 +273,6 @@ export default function CreateJob() {
       setJobField(item);
     } else {
       setJobField('');
-    }
-  };
-
-  const onCaptchaChange = (value: string | null) => {
-    // Set the captcha token when the user completes the reCAPTCHA
-    if (value) {
-      formData.captchaToken = value;
     }
   };
 
@@ -597,15 +595,7 @@ export default function CreateJob() {
           </div>
         </div>
 
-        <div className="pb-20px">
-          <ReCAPTCHA
-            size="normal"
-            sitekey={RECAPTCHA_KEY_ID}
-            onChange={onCaptchaChange}
-            ref={recaptcha}
-          />
-        </div>
-
+        <RecaptchaNotice />
         <button
           disabled={isLoading}
           type="submit"
