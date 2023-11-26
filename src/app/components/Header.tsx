@@ -11,7 +11,7 @@ const navigation = [
   { name: 'Remote jobs Greece', href: '/', current: true },
   { name: 'Jobs', href: '/jobs', current: false },
   { name: 'Contact', href: '/contact', current: false },
-  { name: 'About us', href: '/about', current: false },
+  // { name: 'About us', href: '/about', current: false },
 ];
 
 function classNames(...classes: string[]) {
