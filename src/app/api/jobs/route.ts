@@ -12,6 +12,83 @@ import {
 import { hasInvalidGoogleRecaptcha } from '@/app/util/recaptcha.util';
 import { FormData } from 'next/dist/compiled/@edge-runtime/primitives';
 
+ const DUMMY_JOBS_RESPONSE: JobsResponse = {
+  total: 3,
+  totalPages: 1,
+  data: [
+    {
+      id: 1,
+      title: { rendered: "Frontend Developer (React, TypeScript)" },
+      content: {
+        rendered: "We are looking for a skilled Frontend Developer to join our remote team. You'll work with modern technologies and contribute to exciting projects.",
+      },
+      acf: {
+        company_name: "TechSolutions",
+        company_logo: "/logo-placeholder-image.png",
+        employment_type: ["Full-time"],
+        salary_minimum_range: 2500,
+        salary_maximum_range: 3500,
+        salary_time_frame: "Monthly",
+        job_field: ["Software Development"],
+        tags: [{ name: "React" }, { name: "TypeScript" }, { name: "Remote" }],
+        experience: "2+ years",
+        languages: ["English", "Greek"],
+        working_conditions: {
+          rendered: "100% remote, flexible working hours, equipment budget.",
+        },
+        job_url: "https://remotejobsgreece.com/jobs/frontend-developer",
+      },
+    },
+    {
+      id: 2,
+      title: { rendered: "Digital Marketing Specialist" },
+      content: {
+        rendered: "Join our team as a Digital Marketing Specialist and help us grow our online presence. You'll work on campaigns, SEO, and content strategy.",
+      },
+      acf: {
+        company_name: "MarketingGenius",
+        company_logo: "/logo-placeholder-image.png",
+        employment_type: ["Part-time", "Freelance"],
+        salary_minimum_range: 1500,
+        salary_maximum_range: 2500,
+        salary_time_frame: "Monthly",
+        job_field: ["Marketing"],
+        tags: [{ name: "SEO" }, { name: "Google Ads" }, { name: "Social Media" }],
+        experience: "3+ years",
+        languages: ["English"],
+        working_conditions: {
+          rendered: "Fully remote, flexible deadlines, project-based work.",
+        },
+        job_url: "https://remotejobsgreece.com/jobs/digital-marketing-specialist",
+      },
+    },
+    {
+      id: 3,
+      title: { rendered: "Customer Support Representative (Greek & English)" },
+      content: {
+        rendered: "Looking for a friendly and professional customer support representative to assist our Greek-speaking and English-speaking customers.",
+      },
+      acf: {
+        company_name: "SupportHub",
+        company_logo: "/logo-placeholder-image.png",
+        employment_type: ["Full-time", "Remote"],
+        salary_minimum_range: 1800,
+        salary_maximum_range: 2200,
+        salary_time_frame: "Monthly",
+        job_field: ["Customer Support"],
+        tags: [{ name: "Support" }, { name: "Remote" }, { name: "Multilingual" }],
+        experience: "1+ years",
+        languages: ["Greek", "English"],
+        working_conditions: {
+          rendered: "Work remotely with a supportive team, training provided.",
+        },
+        job_url: "https://remotejobsgreece.com/jobs/customer-support-representative",
+      },
+    },
+  ],
+};
+
+
 export interface JobsResponse {
   total: number;
   totalPages: number;
@@ -28,36 +105,37 @@ const limiter = rateLimit({
 });
 
 export async function GET(request: NextRequest) {
-  const apiURL = process.env.API_URL!;
-
-  const prefixedFilters = prefixFilterKeysWithFilters(
-    Object.fromEntries(request.nextUrl.searchParams),
-  );
-
-  const queryString = new URLSearchParams({ ...prefixedFilters });
-
-  try {
-    const url = `${apiURL}/wp-json/wp/v2/jobs?${queryString}`;
-    const res = await fetch(url, {
-      cache: isDevEnvironment() ? 'no-cache' : 'force-cache',
-    });
-    if (!res.ok) {
-      return Response.error();
-    }
-
-    const { total, totalPages } = retrievePagesFromHeaders(res);
-    const data = await res.json();
-
-    const response: JobsResponse = {
-      total,
-      totalPages,
-      data,
-    };
-    return Response.json(response);
-  } catch (err) {
-    console.error('route jobs could not be retrieved', err);
-    throw err;
-  }
+  return Response.json(DUMMY_JOBS_RESPONSE)
+  // const apiURL = process.env.API_URL!;
+  //
+  // const prefixedFilters = prefixFilterKeysWithFilters(
+  //   Object.fromEntries(request.nextUrl.searchParams),
+  // );
+  //
+  // const queryString = new URLSearchParams({ ...prefixedFilters });
+  //
+  // try {
+  //   const url = `${apiURL}/wp-json/wp/v2/jobs?${queryString}`;
+  //   const res = await fetch(url, {
+  //     cache: isDevEnvironment() ? 'no-cache' : 'force-cache',
+  //   });
+  //   if (!res.ok) {
+  //     return Response.error();
+  //   }
+  //
+  //   const { total, totalPages } = retrievePagesFromHeaders(res);
+  //   const data = await res.json();
+  //
+  //   const response: JobsResponse = {
+  //     total,
+  //     totalPages,
+  //     data,
+  //   };
+  //   return Response.json(response);
+  // } catch (err) {
+  //   console.error('route jobs could not be retrieved', err);
+  //   throw err;
+  // }
 }
 
 export async function POST(request: NextRequest) {
