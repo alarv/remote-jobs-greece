@@ -7,6 +7,7 @@ import Footer from '@/app/components/Footer';
 import CookiesConsent from '@/app/components/CookiesConsent';
 import GoogleAnalytics from '@/app/components/GoogleAnalytics';
 import Providers from '@/app/providers';
+import { Analytics } from '@vercel/analytics/next';
 
 const interFont = Inter({
   subsets: ['latin'],
@@ -32,6 +33,7 @@ export default function RootLayout({
             <Header />
             <div id="content">
               {children} {/* Your main content goes here */}
+              <Analytics />
             </div>
             <Footer />
           </div>
