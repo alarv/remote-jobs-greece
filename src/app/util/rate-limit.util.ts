@@ -17,7 +17,7 @@ export interface RateLimitStatus {
 }
 
 export function retrieveIp(req: NextRequest): string | null {
-  let ipAddress = req.ip || req.headers.get('x-real-ip');
+  let ipAddress = req.headers.get('x-real-ip');
 
   const forwardedFor = req.headers.get('x-forwarded-for');
   if (!ipAddress && forwardedFor) {

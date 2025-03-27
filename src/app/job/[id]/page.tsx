@@ -21,8 +21,8 @@ async function getJob(id: string): Promise<IJob | undefined> {
 }
 
 type Props = {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export async function generateMetadata(
@@ -30,7 +30,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   // read route params
-  const id = params.id;
+  const { id } = await params;
 
   // fetch data
   const job = await getJob(id);
@@ -46,7 +46,9 @@ export async function generateMetadata(
 }
 
 export default async function Page({ params }: Props) {
-  const job = await getJob(params.id);
+  const { id } = await params;
+
+  const job = await getJob(id);
   if (!job) {
     notFound();
   }

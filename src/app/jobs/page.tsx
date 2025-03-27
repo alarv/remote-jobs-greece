@@ -1,10 +1,6 @@
 import React from 'react';
 import JobListings from '../components/JobListings';
-import { IJob } from '../components/JobListing';
-import { IFilters } from '../components/Filters';
-import { JobsResponse } from '@/app/api/jobs/route';
 import { Metadata } from 'next';
-import { prefixFilterKeysWithFilters } from '@/app/util/jobs.util';
 
 export const metadata: Metadata = {
   title: 'Jobs | Remote Jobs Greece',
@@ -15,11 +11,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function Jobs({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
+type SearchParams = { [key: string]: string | string[] | undefined };
+
+export default async function Jobs() {
   return (
     <>
       <main className="mx-auto max-w-5xl py-5 px-2 sm:px-6 lg:px-8">
